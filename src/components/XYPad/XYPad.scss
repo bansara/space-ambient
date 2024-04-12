@@ -1,0 +1,23 @@
+.touchpad {
+  width: 300px;
+  height: 70%;
+  max-width: 90%;
+  position: relative;
+  border: none;
+  border-radius: 1.5rem;
+  margin-top: 3rem;
+
+  @media (min-width: 992px) {
+    width: 500px;
+  }
+
+  .ball {
+    width: 64px;
+    background-color: transparent;
+    border-radius: 100%;
+    position: absolute;
+    bottom: calc(50% - 32px);
+    right: calc(50% - 30px);
+    cursor: grab;
+  }
+}

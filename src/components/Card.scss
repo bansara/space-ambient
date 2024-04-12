@@ -1,0 +1,21 @@
+ion-card.glassmorphic {
+  max-width: 90%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  @media (min-width: 992px) {
+    flex-grow: 1;
+    max-width: calc(50% - 2.5rem);
+  }
+
+  ion-card-content.glassmorphic {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 1rem 1rem;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  ion-card-title {
+    text-align: center;
+  }
+}
