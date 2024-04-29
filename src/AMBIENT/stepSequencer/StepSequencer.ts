@@ -57,7 +57,6 @@ export class StepSequencer {
   }
 
   play(): void {
-    console.log(this.padLoopers);
     if (this.ambient.context.state !== "running") {
       this.ambient.context.resume();
     }
@@ -120,12 +119,12 @@ export class StepSequencer {
       this.isPlaying = false;
       clearTimeout(this.timerId!);
       for (const padLooper in this.padLoopers) {
-        console.log("stopping", padLooper);
         this.padLoopers[padLooper].stopSample(this.context.currentTime);
       }
-      this.binaural.stop();
-      this.nature?.stopSample(this.context.currentTime);
+      this.stopBinaural();
+      this.stopNature();
       this.oneShot?.stopSamples();
+      this.stopLeftRight();
     }
   }
 
@@ -228,6 +227,19 @@ export class StepSequencer {
   stopNature(): void {
     this.natureIsPlaying = false;
     this.nature?.stopSample(this.context.currentTime);
+  }
+
+  stopLeftRight() {
+    if (this.left instanceof PadLooper) {
+      this.left.stopSample(this.context.currentTime);
+    } else if (this.left instanceof OneShot) {
+      this.left.stopSamples();
+    }
+    if (this.right instanceof PadLooper) {
+      this.right.stopSample(this.context.currentTime);
+    } else if (this.right instanceof OneShot) {
+      this.right.stopSamples();
+    }
   }
 
   addOneShot(preset: OneShotPreset): void {
