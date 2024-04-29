@@ -39,6 +39,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   junoOctave: {
     id: "junoOctave",
@@ -57,6 +58,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   uke: {
     id: "uke",
@@ -75,6 +77,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   bouzouki: {
     id: "bouzouki",
@@ -93,6 +96,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   majPentLoop: {
     id: "majPentLoop",
@@ -111,6 +115,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   isochronic: {
     id: "isochronic",
@@ -131,6 +136,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   devLoop: {
     id: "devLoop",
@@ -149,5 +155,6 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
 };

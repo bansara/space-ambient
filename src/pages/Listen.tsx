@@ -34,8 +34,8 @@ const Listen: React.FC = () => {
         />
         <div id="listen-container">
           <XYPad
-            onChangeX={ambient.crossFadeLiveStrings}
-            onChangeY={ambient.crossFadePadLoopers}
+            onChangeX={ambient.crossFadeLeftRight}
+            onChangeY={ambient.crossFadeLowHigh}
           />
         </div>
       </IonContent>

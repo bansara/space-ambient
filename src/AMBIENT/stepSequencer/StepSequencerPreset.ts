@@ -1,3 +1,5 @@
+import { OneShot } from "../sampler/OneShot/OneShot";
+import { OneShotPreset } from "../sampler/OneShot/OneShotPresets";
 import {
   PadLooperPreset,
   StepSequencerPadLooperPresets,
@@ -5,13 +7,20 @@ import {
 import { TransposerPreset } from "../sampler/Transposer/TransposerPreset";
 import { BinauralPreset } from "../synths/binaural/Binaural";
 
+export interface LeftRightSampler {
+  type: "transposer" | "padLooper" | "oneShot";
+  sampler: TransposerPreset | PadLooperPreset | OneShotPreset;
+}
+
 export interface StepSequencerPreset {
   id: string;
   tempo: number;
   sequenceLength: number;
   padLoopers?: StepSequencerPadLooperPresets;
+  left: LeftRightSampler;
+  right: LeftRightSampler;
   transposers?: TransposerPreset[];
-  oneShots?: URL[];
+  oneShots?: OneShotPreset;
   displayName: string;
   binaural: BinauralPreset;
   nature: PadLooperPreset;

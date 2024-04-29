@@ -83,5 +83,6 @@ export class PadLooper extends Sampler {
     this.setLfoGain(lfoGain);
     this.setLfoFilter(lfoFilter);
     this.setEnvelope(envelope);
+    this.setReverbSendGain(options.reverbSendGain);
   }
 }

@@ -27,6 +27,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
     noteDuration: 4,
     probabilityDenominator: 32,
     useRandomPattern: true,
+    reverbSendGain: 0.5,
   },
   breathPiano: {
     id: "breathPiano",
@@ -40,6 +41,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
     sampleBase: sampleURLs.transposers.piano.sampleBase,
     noteDuration: 4,
     useRandomPattern: false,
+    reverbSendGain: 0.5,
   },
   warmString: {
     id: "warmString",
@@ -51,6 +53,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   airTone: {
     id: "airTone",
@@ -62,6 +65,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   breathAirTone: {
     id: "breathAirTone",
@@ -75,6 +79,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
     },
     noteDuration: 2,
     useRandomPattern: false,
+    reverbSendGain: 0.5,
   },
   metronome: {
     id: "metronome",
@@ -88,6 +93,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
     },
     useRandomPattern: false,
     noteDuration: 1,
+    reverbSendGain: 0.5,
   },
   celeste: {
     id: "celeste",
@@ -99,6 +105,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
   breatheCeleste: {
     id: "breatheCeleste",
@@ -111,6 +118,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       release: 4,
     },
     useRandomPattern: false,
+    reverbSendGain: 0.5,
   },
   spacePiano: {
     id: "spacePiano",
@@ -123,6 +131,7 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       release: 4,
     },
     useRandomPattern: false,
+    reverbSendGain: 0.5,
   },
   topAir: {
     id: "topAir",
@@ -134,5 +143,6 @@ export const transposerPresets: { [key: string]: TransposerPreset } = {
       sustain: 1,
       release: 4,
     },
+    reverbSendGain: 0.5,
   },
 };

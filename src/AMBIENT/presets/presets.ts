@@ -20,8 +20,14 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     padLoopers: {
       low: padLooperPresets.majPentLoop,
       high: padLooperPresets.hamsadhwani,
-      // padLooperPresets.uke,
-      vibes: padLooperPresets.bouzouki,
+    },
+    right: {
+      type: "padLooper",
+      sampler: padLooperPresets.bouzouki,
+    },
+    left: {
+      type: "padLooper",
+      sampler: padLooperPresets.uke,
     },
     transposers: [
       {
@@ -69,6 +75,14 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     padLoopers: {
       high: padLooperPresets.hamsadhwani,
       low: padLooperPresets.junoOctave,
+    },
+    right: {
+      type: "padLooper",
+      sampler: padLooperPresets.bouzouki,
+    },
+    left: {
+      type: "padLooper",
+      sampler: padLooperPresets.uke,
     },
     transposers: [
       {

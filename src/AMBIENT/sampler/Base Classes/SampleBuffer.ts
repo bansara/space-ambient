@@ -31,7 +31,6 @@ export abstract class SampleBuffer {
     // current value
     this.output.gain.cancelAndHoldAtTime(time);
     const { release } = this.envelope;
-    console.log("buffer stop", time + release);
     this.output.gain.setTargetAtTime(0, time, release / 5);
     this.source.stop(time + release);
   }

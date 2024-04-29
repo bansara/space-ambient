@@ -14,16 +14,13 @@ export abstract class Sampler {
   lfoEq: BiquadFilterNode;
   outputEq: BiquadFilterNode;
   buffer!: AudioBuffer;
-  sequencer: StepSequencer | BreathSequencer;
+  sequencer: StepSequencer;
+  reverbSend: GainNode;
 
   abstract envelope: ADSR;
   abstract loopOptions: BufferLoopOptions;
 
-  constructor(
-    ambient: Ambient,
-    path: URL,
-    sequencer: StepSequencer | BreathSequencer
-  ) {
+  constructor(ambient: Ambient, path: URL, sequencer: StepSequencer) {
     this.ambient = ambient;
     this.context = ambient.context;
     this.sequencer = sequencer;
@@ -34,8 +31,11 @@ export abstract class Sampler {
     this.outputEq.type = "lowpass";
     this.outputEq.frequency.value = 5000;
     this.output = this.context.createGain();
+    this.reverbSend = this.context.createGain();
+    this.reverbSend.connect(sequencer.reverbSend);
     this.lfoEq.connect(this.outputEq);
     this.outputEq.connect(this.output);
+    this.outputEq.connect(this.reverbSend);
     this.output.connect(this.sequencer.output);
     this.loadSample(path);
   }
@@ -81,6 +81,11 @@ export abstract class Sampler {
 
   setEnvelope(envelope: ADSR) {
     this.envelope = envelope;
+    return this;
+  }
+
+  setReverbSendGain(gain: number) {
+    this.reverbSend.gain.value = gain;
     return this;
   }
 

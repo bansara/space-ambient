@@ -1,7 +1,7 @@
 import { UI } from "./UI/ui";
 import { BreathSequencer } from "./breathSequencer/BreathSequencer";
 import { BreathSequencerPreset } from "./breathSequencer/BreathSequencerPreset";
-import { CombinedReverb } from "./effects/CombinedReverb";
+import { Reverb } from "./effects/CombinedReverb";
 import { presets } from "./presets/presets";
 import { SamplerUtils } from "./sampler/Base Classes/SamplerUtils";
 import { StepSequencer } from "./stepSequencer/StepSequencer";
@@ -19,15 +19,15 @@ export class Ambient {
   mood: "major" | "minor" = "major";
   x = 0.5;
   y = 0.5;
-  // reverb: CombinedReverb;
+  reverb: Reverb;
 
   constructor() {
     this.context = createContext();
     this.masterVol = this.context.createGain();
-    // this.reverb = new CombinedReverb(this.context);
+    this.reverb = new Reverb(this.context);
     // this.masterVol.connect(this.reverb.input);
-    this.masterVol.connect(this.context.destination);
     // this.reverb.output.connect(this.context.destination);
+    this.masterVol.connect(this.context.destination);
     this.addSequence(presets.default);
     // TODO: DELETE BEFORE PRODUCTION
     // @ts-ignore
@@ -102,7 +102,7 @@ export class Ambient {
     }
   };
 
-  crossFadePadLoopers = (y: number): void => {
+  crossFadeLowHigh = (y: number): void => {
     if (!this.currentSequence) return;
     const { padLoopers } = this.currentSequence;
     const { low, high } = padLoopers;
@@ -119,11 +119,9 @@ export class Ambient {
     this.setFilterFrequency(y, 1000, 5000);
   };
 
-  crossFadeLiveStrings = (x: number): void => {
+  crossFadeLeftRight = (x: number): void => {
     if (!this.currentSequence) return;
-    const { padLoopers } = this.currentSequence;
-    const left = padLoopers.uke;
-    const right = padLoopers.bouzouki;
+    const { left, right } = this.currentSequence;
     left?.output.gain.cancelAndHoldAtTime(this.context.currentTime);
     left?.output.gain.linearRampToValueAtTime(
       0.5 * (1 - x) + 0.05,

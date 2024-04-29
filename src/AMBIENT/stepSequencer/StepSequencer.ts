@@ -1,8 +1,10 @@
 import { Ambient } from "../Ambient";
 import { FREQUENCIES, notes } from "../sampler";
 import { OneShot } from "../sampler/OneShot/OneShot";
+import { OneShotPreset } from "../sampler/OneShot/OneShotPresets";
 import { PadLooper } from "../sampler/Pad/PadLooper";
 import {
+  PadLooperPreset,
   StepSequencerPadLooperPresets,
   StepSequencerPadLoopers,
 } from "../sampler/Pad/PadLooperPreset";
@@ -10,7 +12,7 @@ import { Transposer } from "../sampler/Transposer/Transposer";
 import { TransposerPreset } from "../sampler/Transposer/TransposerPreset";
 import { sampleURLs } from "../samples/sampleURLs";
 import { Binaural } from "../synths/binaural/Binaural";
-import { StepSequencerPreset } from "./StepSequencerPreset";
+import { LeftRightSampler, StepSequencerPreset } from "./StepSequencerPreset";
 
 export class StepSequencer {
   id: string;
@@ -27,6 +29,8 @@ export class StepSequencer {
   currentPreset: StepSequencerPreset | undefined;
   transposers: { [key: string]: Transposer } = {}; // general pitched samples
   padLoopers: StepSequencerPadLoopers = {}; // pads, atmospheres, isochronic tones
+  left: PadLooper | Transposer | OneShot | undefined;
+  right: PadLooper | Transposer | OneShot | undefined;
   oneShot: OneShot | undefined;
   binaural: Binaural; // binaural beats
   binauralIsPlaying: boolean = false;
@@ -34,6 +38,7 @@ export class StepSequencer {
   nature: PadLooper | undefined;
   output: GainNode;
   outputEq: BiquadFilterNode;
+  reverbSend: GainNode;
 
   constructor(ambient: Ambient, id: string) {
     this.ambient = ambient;
@@ -42,10 +47,13 @@ export class StepSequencer {
     this.outputEq = this.context.createBiquadFilter();
     this.outputEq.type = "lowpass";
     this.outputEq.frequency.value = 2237;
+    this.outputEq.Q.value = 0.1;
     this.output = this.context.createGain();
     this.output.connect(this.outputEq);
     this.outputEq.connect(ambient.masterVol);
     this.binaural = new Binaural(this.context, FREQUENCIES[notes.C2], 8);
+    this.reverbSend = this.context.createGain();
+    this.reverbSend.connect(ambient.reverb.input);
   }
 
   play(): void {
@@ -103,6 +111,8 @@ export class StepSequencer {
     if (this.oneShot) {
       this.oneShot.playback(beatNumber);
     }
+    this.left?.playback(beatNumber);
+    this.right?.playback(beatNumber);
   }
 
   stop(): void {
@@ -134,6 +144,8 @@ export class StepSequencer {
     if (preset.oneShots) {
       this.addOneShot(preset.oneShots);
     }
+    this.left = this.loadLeftRightSampler(preset.left);
+    this.right = this.loadLeftRightSampler(preset.right);
   }
 
   loadPadLooperPresets(padLoopers: StepSequencerPadLooperPresets): void {
@@ -142,7 +154,8 @@ export class StepSequencer {
       this.addPadLooper(padLooper, looper.path)
         .setLfoGain(looper.lfoGain)
         .setLfoFilter(looper.lfoFilter)
-        .setEnvelope(looper.envelope);
+        .setEnvelope(looper.envelope)
+        .setReverbSendGain(looper.reverbSendGain);
     }
   }
 
@@ -162,8 +175,38 @@ export class StepSequencer {
     while (id in this.transposers) {
       id = id + `-${Math.random().toString(16).slice(2, 6)}`;
     }
-    this.transposers[id] = new Transposer(this.ambient, this, preset);
+    this.transposers[id] = new Transposer(
+      this.ambient,
+      this,
+      preset
+    ).setReverbSendGain(preset.reverbSendGain);
     return this.transposers[id];
+  }
+
+  loadLeftRightSampler(
+    sampler: LeftRightSampler
+  ): Transposer | PadLooper | OneShot {
+    switch (sampler.type) {
+      case "transposer":
+        return new Transposer(
+          this.ambient,
+          this,
+          sampler.sampler as TransposerPreset
+        );
+      case "padLooper":
+        const looper = sampler.sampler as PadLooperPreset;
+        return new PadLooper(this.ambient, looper.path, this)
+          .setLfoGain(looper.lfoGain)
+          .setLfoFilter(looper.lfoFilter)
+          .setEnvelope(looper.envelope)
+          .setReverbSendGain(looper.reverbSendGain);
+      case "oneShot":
+        return new OneShot(
+          this.ambient,
+          sampler.sampler as OneShotPreset,
+          this
+        );
+    }
   }
   // addWaveform(id: string, path: URL): Waveform {
   //   this.waveforms[id] = new Waveform(this.ambient, path);
@@ -187,8 +230,8 @@ export class StepSequencer {
     this.nature?.stopSample(this.context.currentTime);
   }
 
-  addOneShot(filePaths: URL[]): void {
-    this.oneShot = new OneShot(this.ambient, filePaths, this);
+  addOneShot(preset: OneShotPreset): void {
+    this.oneShot = new OneShot(this.ambient, preset, this);
   }
 
   setOutputGain(gain: number): void {

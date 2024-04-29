@@ -90,8 +90,36 @@ export class SamplerUtils {
 
     return playbackRate;
   }
-
+  /**
+   *
+   * @param baseNote - the base note to calculate from
+   * @param targetNote - the target note to calculate to
+   * @returns number of semitones between the two notes
+   */
   public static semitonesBetween(baseNote: notes, targetNote: notes): number {
     return NOTE_TO_SEMITONE_MAP[targetNote] - NOTE_TO_SEMITONE_MAP[baseNote];
+  }
+
+  /**
+   *
+   * @param probability - the probability of the event happening bewteen 0 and 1
+   * @returns boolean
+   */
+  public static elementOfChance(probability: number): boolean {
+    return Math.random() < probability;
+  }
+
+  /**
+   *
+   * @param currentIndex - the index to avoid
+   * @param arrayLength - the length of the array
+   * @returns a random index that is not the current index
+   */
+  public static chooseOtherIndex(currentIndex: number, arrayLength: number) {
+    let newIndex = currentIndex;
+    while (newIndex === currentIndex) {
+      newIndex = Math.floor(Math.random() * arrayLength);
+    }
+    return newIndex;
   }
 }
