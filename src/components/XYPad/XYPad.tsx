@@ -10,6 +10,7 @@ import ship from "../../images/ship.webp";
 import { useAmbient } from "../../AMBIENT/react";
 import { OneShot } from "../../AMBIENT/sampler/OneShot/OneShot";
 import { Sampler } from "../../AMBIENT/sampler/Base Classes/Sampler";
+import { render } from "@testing-library/react";
 
 interface XYPadProps {
   onChangeX: (x: number) => void;
@@ -18,6 +19,7 @@ interface XYPadProps {
 
 const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
   const ambient = useAmbient();
+  console.log(render, ambient.currentSequence?.currentPreset?.xFunction);
   const touchpadRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLImageElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);

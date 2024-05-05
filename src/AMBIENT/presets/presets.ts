@@ -79,11 +79,18 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     tempo: 120,
     sequenceLength: 16,
     mood: "major",
-    xFunction: XYFunctions.setReverbSendGain,
-    yFunction: XYFunctions.setFilterFrequency,
-    padLoopers: {
-      high: padLooperPresets.hamsadhwani,
-      low: padLooperPresets.junoOctave,
+    xFunction: XYFunctions.setFilterFrequency,
+    yFunction: XYFunctions.crossFadeTopBottom,
+
+    topBottom: {
+      top: {
+        type: "padLooper",
+        sampler: padLooperPresets.hamsadhwani,
+      },
+      bottom: {
+        type: "padLooper",
+        sampler: padLooperPresets.ocean,
+      },
     },
     leftRight: {
       right: {

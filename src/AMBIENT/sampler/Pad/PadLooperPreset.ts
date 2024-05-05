@@ -17,8 +17,6 @@ export interface StepSequencerPadLoopers {
 
 export interface StepSequencerPadLooperPresets {
   [key: string]: PadLooperPreset;
-  high: PadLooperPreset;
-  low: PadLooperPreset;
 }
 
 export const padLooperPresets: { [key: string]: PadLooperPreset } = {
@@ -39,7 +37,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
-    reverbSendGain: 0.5,
+    reverbSendGain: 0,
   },
   ocean: {
     id: "ocean",

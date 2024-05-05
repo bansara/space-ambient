@@ -123,17 +123,17 @@ export class Ambient {
   };
   crossFadeTopBottom = (value: number): void => {
     if (!this.currentSequence || !this.currentSequence.topBottom) return;
-    this.currentSequence.topBottom.top.output.gain.cancelAndHoldAtTime(
-      this.context.currentTime
-    );
-    this.currentSequence.topBottom.top.output.gain.linearRampToValueAtTime(
-      0.5 * (1 - value) + 0.2,
-      this.context.currentTime + 0.01
-    );
     this.currentSequence.topBottom.bottom.output.gain.cancelAndHoldAtTime(
       this.context.currentTime
     );
     this.currentSequence.topBottom.bottom.output.gain.linearRampToValueAtTime(
+      0.5 * (1 - value) + 0.2,
+      this.context.currentTime + 0.01
+    );
+    this.currentSequence.topBottom.top.output.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.topBottom.top.output.gain.linearRampToValueAtTime(
       0.5 * value + 0.2,
       this.context.currentTime + 0.01
     );
