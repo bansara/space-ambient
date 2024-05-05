@@ -41,6 +41,44 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
     },
     reverbSendGain: 0.5,
   },
+  ocean: {
+    id: "ocean",
+    path: sampleURLs.padloopers.ocean.url,
+    lfoGain: {
+      frequency: 1,
+      depth: 0,
+    },
+    lfoFilter: {
+      frequency: 0.002,
+      depth: 0.2,
+    },
+    envelope: {
+      attack: 2,
+      decay: 0,
+      sustain: 1,
+      release: 4,
+    },
+    reverbSendGain: 0.5,
+  },
+  rain: {
+    id: "rain",
+    path: sampleURLs.padloopers.rain.url,
+    lfoGain: {
+      frequency: 1,
+      depth: 0,
+    },
+    lfoFilter: {
+      frequency: 0.002,
+      depth: 0.2,
+    },
+    envelope: {
+      attack: 2,
+      decay: 0,
+      sustain: 1,
+      release: 4,
+    },
+    reverbSendGain: 0.5,
+  },
   junoOctave: {
     id: "junoOctave",
     path: sampleURLs.padloopers.junoOctave.url,

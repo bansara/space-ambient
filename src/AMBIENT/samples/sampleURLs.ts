@@ -1,4 +1,5 @@
 import { notes } from "../sampler";
+import { OneShotURL } from "../sampler/OneShot/OneShotPresets";
 import { PadLooper } from "../sampler/Pad/PadLooper";
 import { Transposer } from "../sampler/Transposer/Transposer";
 // import { Waveform } from "../sampler/Waveform/Waveform";
@@ -15,6 +16,7 @@ export interface SampleLibrary {
   padloopers: { [key: string]: SampleData };
   transposers: { [key: string]: TransposerSampleData };
   waveforms: { [key: string]: SampleData };
+  oneShots: { [key: string]: OneShotURL };
 }
 
 export const sampleURLs: SampleLibrary = {
@@ -81,4 +83,14 @@ export const sampleURLs: SampleLibrary = {
     },
   },
   waveforms: {},
+  oneShots: {
+    test1: {
+      url: new URL("oneShots/oneShot1.wav", import.meta.url),
+      fadeOutTime: 0,
+    },
+    test2: {
+      url: new URL("oneShots/oneShot2.wav", import.meta.url),
+      fadeOutTime: 0,
+    },
+  },
 };

@@ -17,25 +17,25 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     tempo: 120,
     sequenceLength: 16,
     mood: "major",
-    padLoopers: {
-      low: padLooperPresets.majPentLoop,
-      high: padLooperPresets.hamsadhwani,
-    },
+    // padLoopers: {
+    //   low: padLooperPresets.majPentLoop,
+    //   high: padLooperPresets.hamsadhwani,
+    // },
     right: {
       type: "padLooper",
-      sampler: padLooperPresets.bouzouki,
+      sampler: padLooperPresets.ocean,
     },
     left: {
       type: "padLooper",
-      sampler: padLooperPresets.uke,
+      sampler: padLooperPresets.rain,
     },
-    transposers: [
-      {
-        ...transposerPresets.warmString,
-        noteSet: [notes.G2, notes.A2, notes.C3, notes.D3, notes.E3],
-      },
-    ],
-    // oneShots: OneShotPresets.zenBeach,
+    // transposers: [
+    //   {
+    //     ...transposerPresets.warmString,
+    //     noteSet: [notes.G2, notes.A2, notes.C3, notes.D3, notes.E3],
+    //   },
+    // ],
+    oneShots: OneShotPresets.zenBeach,
     binaural: {
       binauralFrequency: binauralFrequencies.theta,
       baseFrequency: FREQUENCIES[notes.C2],

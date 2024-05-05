@@ -1,8 +1,7 @@
 import { Ambient } from "../../Ambient";
-import { BreathSequencer } from "../../breathSequencer/BreathSequencer";
 import { StepSequencer } from "../../stepSequencer/StepSequencer";
 import { SamplerUtils } from "../Base Classes/SamplerUtils";
-import { OneShotPreset } from "./OneShotPresets";
+import { OneShotPreset, OneShotURL } from "./OneShotPresets";
 
 export interface OneShotSample {
   source: AudioBufferSourceNode | null;
@@ -10,7 +9,7 @@ export interface OneShotSample {
   length: number;
   isLoaded: boolean;
   isPlaying: boolean;
-  numberOfLoopsPlayed: number;
+  fadeOutTime: number;
 }
 
 export class OneShot {
@@ -20,13 +19,28 @@ export class OneShot {
   preset: OneShotPreset;
   sample1!: OneShotSample;
   sample2!: OneShotSample;
+  sample1Gain: GainNode;
+  sample2Gain: GainNode;
   playNextIndex = 1;
   sampleURLIndex = 0;
   output: GainNode;
   reverbSend: GainNode;
+  currentSampleStartTime: number = 0;
+  currentSampleLength: number = 0;
+  currentSampleFadeOutTime: number = 0;
+  timeoutId: NodeJS.Timeout | undefined = undefined;
 
   get isSamplePlaying() {
     return this.sample1?.isPlaying || this.sample2?.isPlaying;
+  }
+
+  get shouldPlayNextSample() {
+    return (
+      this.sequencer.nextNoteTime >=
+      this.currentSampleStartTime +
+        this.currentSampleLength -
+        this.currentSampleFadeOutTime
+    );
   }
 
   constructor(
@@ -38,7 +52,11 @@ export class OneShot {
     this.context = ambient.context;
     this.preset = preset;
     this.sequencer = sequencer;
+    this.sample1Gain = this.context.createGain();
+    this.sample2Gain = this.context.createGain();
     this.output = this.context.createGain();
+    this.sample1Gain.connect(this.output);
+    this.sample2Gain.connect(this.output);
     this.output.connect(this.sequencer.output);
     this.reverbSend = this.context.createGain();
     this.output.connect(this.reverbSend);
@@ -51,8 +69,8 @@ export class OneShot {
       this.assignToSampleBuffer
     );
   }
-  async loadSample(path: URL): Promise<OneShotSample> {
-    const response = await fetch(path);
+  async loadSample(sample: OneShotURL): Promise<OneShotSample> {
+    const response = await fetch(sample.url);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
     return {
@@ -61,62 +79,79 @@ export class OneShot {
       length: audioBuffer.duration,
       isLoaded: true,
       isPlaying: false,
-      numberOfLoopsPlayed: 0,
+      fadeOutTime: sample.fadeOutTime,
     };
   }
 
   playback(beatNumber: number): void {
-    if (!this.isSamplePlaying && beatNumber === 0) {
+    if (this.shouldPlayNextSample) {
       const bufferToPlay =
         this.playNextIndex === 1 ? this.sample1 : this.sample2;
-      if (
-        bufferToPlay.isLoaded &&
-        bufferToPlay.numberOfLoopsPlayed < this.preset.numberOfLoops
-      ) {
-        this.playSample(this.sequencer.nextNoteTime, bufferToPlay);
-        bufferToPlay.numberOfLoopsPlayed++;
-      }
-      if (this.sample1.numberOfLoopsPlayed === this.preset.numberOfLoops) {
-        this.chooseNextFilePathIndex();
-        this.loadSample(this.preset.sampleURLs[this.sampleURLIndex]).then(
-          this.assignToSampleBuffer
+      if (bufferToPlay.isLoaded) {
+        this.playSample(
+          this.sequencer.nextNoteTime,
+          bufferToPlay,
+          this.playNextIndex
         );
+        this.loadSample(this.chooseNextFile()).then(this.assignToSampleBuffer);
       }
     }
   }
 
-  playSample(time: number, sample: OneShotSample) {
-    let { source } = sample;
+  playSample(time: number, sample: OneShotSample, playNextIndex: number) {
     sample.isPlaying = true;
-    source = this.context.createBufferSource();
-    source.buffer = sample.buffer;
-    source.connect(this.output);
-    source.start(time);
+    sample.source = this.context.createBufferSource();
+    sample.source.buffer = sample.buffer;
+    const gain = playNextIndex === 2 ? this.sample1Gain : this.sample2Gain;
+    gain.gain.cancelAndHoldAtTime(this.context.currentTime);
+    gain.gain.setValueAtTime(1, this.context.currentTime);
+    sample.source.connect(gain);
+    sample.source.start(time);
+    this.currentSampleStartTime = time;
+    this.currentSampleLength = sample.length;
+    this.currentSampleFadeOutTime = sample.fadeOutTime;
+    if (sample.fadeOutTime > 0) {
+      gain.gain.setTargetAtTime(
+        0,
+        time + sample.length - sample.fadeOutTime,
+        sample.fadeOutTime / 5
+      );
+    }
 
     setTimeout(() => {
       sample.isPlaying = false;
       sample.isLoaded = false;
-    }, sample.length * 1000 + 100);
+    }, sample.length * 1000 - sample.fadeOutTime * 1000);
   }
 
   stopSamples() {
-    if (this.sample1.isPlaying) {
-      this.sample1.source?.stop();
-      this.sample1.isPlaying = false;
-    }
-    if (this.sample2.isPlaying) {
-      this.sample2.source?.stop();
-      this.sample2.isPlaying = false;
-    }
+    this.sample1.source?.stop();
+    this.sample1.isPlaying = false;
+    this.sample1.isLoaded = false;
+
+    this.sample2.source?.stop();
+    this.sample2.isPlaying = false;
+    this.sample2.isLoaded = false;
+
+    this.currentSampleStartTime = 0;
+    this.currentSampleLength = 0;
+    this.currentSampleFadeOutTime = 0;
+
+    this.loadSample(this.preset.sampleURLs[this.sampleURLIndex]).then(
+      this.assignToSampleBuffer
+    );
   }
 
-  chooseNextFilePathIndex() {
-    this.sampleURLIndex = SamplerUtils.elementOfChance(this.preset.probability)
+  chooseNextFile(): OneShotURL {
+    this.sampleURLIndex = SamplerUtils.elementOfChance(
+      this.preset.repeatProbability
+    )
       ? this.sampleURLIndex
       : SamplerUtils.chooseOtherIndex(
           this.sampleURLIndex,
           this.preset.sampleURLs.length
         );
+    return this.preset.sampleURLs[this.sampleURLIndex];
   }
 
   assignToSampleBuffer = (sample: OneShotSample) => {

@@ -31,7 +31,7 @@ export class PadLooper extends Sampler {
       frequency: 0.1,
       depth: 0.5,
     });
-    this.output.gain.value = 0.5;
+    this.output.gain.value = 0;
   }
 
   playback(beatNumber: number): void {
@@ -54,15 +54,11 @@ export class PadLooper extends Sampler {
     const player = this.note;
     if (player) {
       player.stopSample(time);
-      setTimeout(() => {
-        this.cleanup();
-        console.log(this.context.currentTime);
-      }, this.envelope.release * 1000);
+      this.cleanup();
     }
   }
 
   cleanup(): void {
-    console.log("cleanup");
     this.note = null;
   }
 
