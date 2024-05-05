@@ -59,7 +59,9 @@ export class OneShot {
     this.sample2Gain.connect(this.output);
     this.output.connect(this.sequencer.output);
     this.reverbSend = this.context.createGain();
+    this.reverbSend.gain.value = preset.reverbSendGain;
     this.output.connect(this.reverbSend);
+    this.output.connect(this.sequencer.output);
     this.reverbSend.connect(sequencer.reverbSend);
 
     if (this.preset.sampleURLs.length < 2) {
@@ -143,6 +145,24 @@ export class OneShot {
   }
 
   chooseNextFile(): OneShotURL {
+    this.preset.shouldChooseRandomSample
+      ? this.chooseRandomSampleURLIndex()
+      : this.incrementSampleURLIndex();
+    return this.preset.sampleURLs[this.sampleURLIndex];
+  }
+
+  incrementSampleURLIndex() {
+    this.sampleURLIndex = SamplerUtils.elementOfChance(
+      this.preset.repeatProbability
+    )
+      ? this.sampleURLIndex
+      : this.sampleURLIndex++;
+    if (this.sampleURLIndex >= this.preset.sampleURLs.length) {
+      this.sampleURLIndex = 0;
+    }
+  }
+
+  chooseRandomSampleURLIndex() {
     this.sampleURLIndex = SamplerUtils.elementOfChance(
       this.preset.repeatProbability
     )
@@ -151,7 +171,6 @@ export class OneShot {
           this.sampleURLIndex,
           this.preset.sampleURLs.length
         );
-    return this.preset.sampleURLs[this.sampleURLIndex];
   }
 
   assignToSampleBuffer = (sample: OneShotSample) => {

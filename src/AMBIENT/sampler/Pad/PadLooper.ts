@@ -31,7 +31,7 @@ export class PadLooper extends Sampler {
       frequency: 0.1,
       depth: 0.5,
     });
-    this.output.gain.value = 0;
+    // this.output.gain.value = 1;
   }
 
   playback(beatNumber: number): void {

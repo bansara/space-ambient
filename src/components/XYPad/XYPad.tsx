@@ -8,6 +8,8 @@ import React, {
 import "./XYPad.scss";
 import ship from "../../images/ship.webp";
 import { useAmbient } from "../../AMBIENT/react";
+import { OneShot } from "../../AMBIENT/sampler/OneShot/OneShot";
+import { Sampler } from "../../AMBIENT/sampler/Base Classes/Sampler";
 
 interface XYPadProps {
   onChangeX: (x: number) => void;

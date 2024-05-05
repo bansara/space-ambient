@@ -3,7 +3,10 @@ import { OneShot } from "../sampler/OneShot/OneShot";
 import { OneShotPresets } from "../sampler/OneShot/OneShotPresets";
 import { padLooperPresets } from "../sampler/Pad/PadLooperPreset";
 import { transposerPresets } from "../sampler/Transposer/TransposerPreset";
-import { StepSequencerPreset } from "../stepSequencer/StepSequencerPreset";
+import {
+  StepSequencerPreset,
+  XYFunctions,
+} from "../stepSequencer/StepSequencerPreset";
 import { binauralFrequencies } from "../synths/binaural";
 import { natureSounds } from "./naturePresets";
 import n1 from "../../images/n1.webp";
@@ -21,14 +24,18 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     //   low: padLooperPresets.majPentLoop,
     //   high: padLooperPresets.hamsadhwani,
     // },
-    right: {
-      type: "padLooper",
-      sampler: padLooperPresets.ocean,
+    leftRight: {
+      left: {
+        type: "padLooper",
+        sampler: padLooperPresets.rain,
+      },
+      right: {
+        type: "padLooper",
+        sampler: padLooperPresets.ocean,
+      },
     },
-    left: {
-      type: "padLooper",
-      sampler: padLooperPresets.rain,
-    },
+    xFunction: XYFunctions.crossFadeLeftRight,
+    yFunction: XYFunctions.setFilterFrequency,
     // transposers: [
     //   {
     //     ...transposerPresets.warmString,
@@ -72,17 +79,21 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     tempo: 120,
     sequenceLength: 16,
     mood: "major",
+    xFunction: XYFunctions.setReverbSendGain,
+    yFunction: XYFunctions.setFilterFrequency,
     padLoopers: {
       high: padLooperPresets.hamsadhwani,
       low: padLooperPresets.junoOctave,
     },
-    right: {
-      type: "padLooper",
-      sampler: padLooperPresets.bouzouki,
-    },
-    left: {
-      type: "padLooper",
-      sampler: padLooperPresets.uke,
+    leftRight: {
+      right: {
+        type: "padLooper",
+        sampler: padLooperPresets.bouzouki,
+      },
+      left: {
+        type: "padLooper",
+        sampler: padLooperPresets.uke,
+      },
     },
     transposers: [
       {

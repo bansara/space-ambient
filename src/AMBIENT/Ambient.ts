@@ -1,9 +1,11 @@
 import { UI } from "./UI/ui";
 import { BreathSequencer } from "./breathSequencer/BreathSequencer";
 import { BreathSequencerPreset } from "./breathSequencer/BreathSequencerPreset";
-import { Reverb } from "./effects/CombinedReverb";
+import { Reverb } from "./effects/Reverb";
 import { presets } from "./presets/presets";
+import { Sampler } from "./sampler/Base Classes/Sampler";
 import { SamplerUtils } from "./sampler/Base Classes/SamplerUtils";
+import { OneShot } from "./sampler/OneShot/OneShot";
 import { StepSequencer } from "./stepSequencer/StepSequencer";
 import { StepSequencerPreset } from "./stepSequencer/StepSequencerPreset";
 import { createContext } from "./utils/index";
@@ -26,7 +28,7 @@ export class Ambient {
     this.masterVol = this.context.createGain();
     this.reverb = new Reverb(this.context);
     // this.masterVol.connect(this.reverb.input);
-    // this.reverb.output.connect(this.context.destination);
+    this.reverb.output.connect(this.context.destination);
     this.masterVol.connect(this.context.destination);
     this.addSequence(presets.default);
     // TODO: DELETE BEFORE PRODUCTION
@@ -79,11 +81,11 @@ export class Ambient {
     this.breathSequence.loadBreathPreset(preset);
   }
 
-  setFilterFrequency = (x: number, min = 1000, max = 5000): void => {
+  setFilterFrequency = (value: number, min = 1000, max = 5000): void => {
     if (!this.currentSequence) return;
     const { outputEq } = this.currentSequence;
     // Calculate the target frequency based on the x value
-    const targetFrequency = SamplerUtils.scaleFrequency(x, min, max);
+    const targetFrequency = SamplerUtils.scaleFrequency(value, min, max);
     // Smoothly ramp to the target frequency over 0.2 seconds
     outputEq.frequency.cancelAndHoldAtTime(this.context.currentTime);
     outputEq.frequency.linearRampToValueAtTime(
@@ -102,36 +104,49 @@ export class Ambient {
     }
   };
 
-  crossFadeLowHigh = (y: number): void => {
-    if (!this.currentSequence) return;
-    const { padLoopers } = this.currentSequence;
-    const { low, high } = padLoopers;
-    low?.output.gain.cancelAndHoldAtTime(this.context.currentTime);
-    low?.output.gain.linearRampToValueAtTime(
-      0.5 * (1 - y) + 0.2,
+  crossFadeLeftRight = (value: number): void => {
+    if (!this.currentSequence || !this.currentSequence.leftRight) return;
+    this.currentSequence.leftRight.left.output.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.leftRight.left.output.gain.linearRampToValueAtTime(
+      0.5 * (1 - value) + 0.2,
       this.context.currentTime + 0.01
     );
-    high?.output.gain.cancelAndHoldAtTime(this.context.currentTime);
-    high?.output.gain.linearRampToValueAtTime(
-      0.5 * y + 0.2,
+    this.currentSequence.leftRight.right.output.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.leftRight.right.output.gain.linearRampToValueAtTime(
+      0.5 * value + 0.2,
       this.context.currentTime + 0.01
     );
-    this.setFilterFrequency(y, 1000, 5000);
+  };
+  crossFadeTopBottom = (value: number): void => {
+    if (!this.currentSequence || !this.currentSequence.topBottom) return;
+    this.currentSequence.topBottom.top.output.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.topBottom.top.output.gain.linearRampToValueAtTime(
+      0.5 * (1 - value) + 0.2,
+      this.context.currentTime + 0.01
+    );
+    this.currentSequence.topBottom.bottom.output.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.topBottom.bottom.output.gain.linearRampToValueAtTime(
+      0.5 * value + 0.2,
+      this.context.currentTime + 0.01
+    );
   };
 
-  crossFadeLeftRight = (x: number): void => {
+  setReverbSendGain = (value: number): void => {
     if (!this.currentSequence) return;
-    const { left, right } = this.currentSequence;
-    left?.output.gain.cancelAndHoldAtTime(this.context.currentTime);
-    left?.output.gain.linearRampToValueAtTime(
-      0.5 * (1 - x) + 0.05,
+    this.currentSequence.reverbSend.gain.cancelAndHoldAtTime(
+      this.context.currentTime
+    );
+    this.currentSequence.reverbSend.gain.linearRampToValueAtTime(
+      value,
       this.context.currentTime + 0.01
     );
-    right?.output.gain.cancelAndHoldAtTime(this.context.currentTime);
-    right?.output.gain.linearRampToValueAtTime(
-      0.5 * x + 0.05,
-      this.context.currentTime + 0.01
-    );
-    this.setTransposerProbability(x);
   };
 }

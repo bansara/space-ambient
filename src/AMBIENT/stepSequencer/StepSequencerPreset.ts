@@ -7,18 +7,38 @@ import {
 import { TransposerPreset } from "../sampler/Transposer/TransposerPreset";
 import { BinauralPreset } from "../synths/binaural/Binaural";
 
-export interface LeftRightSampler {
+export interface XYSampler {
   type: "transposer" | "padLooper" | "oneShot";
   sampler: TransposerPreset | PadLooperPreset | OneShotPreset;
+}
+
+export interface LeftRight {
+  left: XYSampler;
+  right: XYSampler;
+}
+
+export interface TopBottom {
+  top: XYSampler;
+  bottom: XYSampler;
+}
+
+export enum XYFunctions {
+  setFilterFrequency = "setFilterFrequency",
+  setTransposerProbability = "setTransposerProbability",
+  crossFadeLeftRight = "crossFadeLeftRight",
+  crossFadeTopBottom = "crossFadeTopBottom",
+  setReverbSendGain = "setReverbSendGain",
 }
 
 export interface StepSequencerPreset {
   id: string;
   tempo: number;
   sequenceLength: number;
+  leftRight?: LeftRight;
+  topBottom?: TopBottom;
+  xFunction: XYFunctions;
+  yFunction: XYFunctions;
   padLoopers?: StepSequencerPadLooperPresets;
-  left: LeftRightSampler;
-  right: LeftRightSampler;
   transposers?: TransposerPreset[];
   oneShots?: OneShotPreset;
   displayName: string;

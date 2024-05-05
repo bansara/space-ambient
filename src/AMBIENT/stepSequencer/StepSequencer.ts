@@ -1,5 +1,6 @@
 import { Ambient } from "../Ambient";
 import { FREQUENCIES, notes } from "../sampler";
+import { Sampler } from "../sampler/Base Classes/Sampler";
 import { OneShot } from "../sampler/OneShot/OneShot";
 import { OneShotPreset } from "../sampler/OneShot/OneShotPresets";
 import { PadLooper } from "../sampler/Pad/PadLooper";
@@ -10,9 +11,13 @@ import {
 } from "../sampler/Pad/PadLooperPreset";
 import { Transposer } from "../sampler/Transposer/Transposer";
 import { TransposerPreset } from "../sampler/Transposer/TransposerPreset";
-import { sampleURLs } from "../samples/sampleURLs";
 import { Binaural } from "../synths/binaural/Binaural";
-import { LeftRightSampler, StepSequencerPreset } from "./StepSequencerPreset";
+import {
+  XYSampler,
+  StepSequencerPreset,
+  LeftRight,
+  TopBottom,
+} from "./StepSequencerPreset";
 
 export class StepSequencer {
   id: string;
@@ -29,13 +34,11 @@ export class StepSequencer {
   currentPreset: StepSequencerPreset | undefined;
   transposers: { [key: string]: Transposer } = {}; // general pitched samples
   padLoopers: StepSequencerPadLoopers = {}; // pads, atmospheres, isochronic tones
-  left: PadLooper | Transposer | OneShot | undefined;
-  right: PadLooper | Transposer | OneShot | undefined;
+  leftRight?: { left: Sampler | OneShot; right: Sampler | OneShot };
+  topBottom?: { top: Sampler | OneShot; bottom: Sampler | OneShot };
   oneShot: OneShot | undefined;
   binaural: Binaural; // binaural beats
   binauralIsPlaying: boolean = false;
-  natureIsPlaying: boolean = false;
-  nature: PadLooper | undefined;
   output: GainNode;
   outputEq: BiquadFilterNode;
   reverbSend: GainNode;
@@ -104,14 +107,13 @@ export class StepSequencer {
     if (this.binauralIsPlaying) {
       this.binaural.playback();
     }
-    if (this.natureIsPlaying) {
-      this.nature?.playback(beatNumber);
-    }
     if (this.oneShot) {
       this.oneShot.playback(beatNumber);
     }
-    this.left?.playback(beatNumber);
-    this.right?.playback(beatNumber);
+    this.leftRight?.left.playback(beatNumber);
+    this.leftRight?.right.playback(beatNumber);
+    this.topBottom?.top.playback(beatNumber);
+    this.topBottom?.bottom.playback(beatNumber);
   }
 
   stop(): void {
@@ -122,9 +124,9 @@ export class StepSequencer {
         this.padLoopers[padLooper].stopSample(this.context.currentTime);
       }
       this.stopBinaural();
-      this.stopNature();
       this.oneShot?.stopSamples();
       this.stopLeftRight();
+      this.stopTopBottom();
     }
   }
 
@@ -138,13 +140,23 @@ export class StepSequencer {
     if (preset.transposers) {
       this.loadTransposerPresets(preset.transposers);
     }
-    this.nature = new PadLooper(this.ambient, preset.nature.path, this);
-    this.nature.output.gain.value = 0.3;
+
     if (preset.oneShots) {
       this.addOneShot(preset.oneShots);
     }
-    this.left = this.loadLeftRightSampler(preset.left);
-    this.right = this.loadLeftRightSampler(preset.right);
+
+    if (preset.leftRight) {
+      this.leftRight = {
+        left: this.loadXYSampler(preset.leftRight.left),
+        right: this.loadXYSampler(preset.leftRight.right),
+      };
+    }
+    if (preset.topBottom) {
+      this.topBottom = {
+        top: this.loadXYSampler(preset.topBottom.top),
+        bottom: this.loadXYSampler(preset.topBottom.bottom),
+      };
+    }
   }
 
   loadPadLooperPresets(padLoopers: StepSequencerPadLooperPresets): void {
@@ -182,9 +194,7 @@ export class StepSequencer {
     return this.transposers[id];
   }
 
-  loadLeftRightSampler(
-    sampler: LeftRightSampler
-  ): Transposer | PadLooper | OneShot {
+  loadXYSampler(sampler: XYSampler): Transposer | PadLooper | OneShot {
     switch (sampler.type) {
       case "transposer":
         return new Transposer(
@@ -221,24 +231,32 @@ export class StepSequencer {
   setBinauralFrequency(binauralFrequency: number): void {
     this.binaural.setBinauralFrequency(binauralFrequency);
   }
-  playNature(): void {
-    this.natureIsPlaying = true;
-  }
-  stopNature(): void {
-    this.natureIsPlaying = false;
-    this.nature?.stopSample(this.context.currentTime);
-  }
 
   stopLeftRight() {
-    if (this.left instanceof PadLooper) {
-      this.left.stopSample(this.context.currentTime);
-    } else if (this.left instanceof OneShot) {
-      this.left.stopSamples();
+    if (!this.leftRight) return;
+    if (this.leftRight.left instanceof PadLooper) {
+      this.leftRight.left.stopSample(this.context.currentTime);
+    } else if (this.leftRight.left instanceof OneShot) {
+      this.leftRight.left.stopSamples();
     }
-    if (this.right instanceof PadLooper) {
-      this.right.stopSample(this.context.currentTime);
-    } else if (this.right instanceof OneShot) {
-      this.right.stopSamples();
+    if (this.leftRight.right instanceof PadLooper) {
+      this.leftRight.right.stopSample(this.context.currentTime);
+    } else if (this.leftRight.right instanceof OneShot) {
+      this.leftRight.right.stopSamples();
+    }
+  }
+
+  stopTopBottom() {
+    if (!this.topBottom) return;
+    if (this.topBottom.top instanceof PadLooper) {
+      this.topBottom.top.stopSample(this.context.currentTime);
+    } else if (this.topBottom.top instanceof OneShot) {
+      this.topBottom.top.stopSamples();
+    }
+    if (this.topBottom.bottom instanceof PadLooper) {
+      this.topBottom.bottom.stopSample(this.context.currentTime);
+    } else if (this.topBottom.bottom instanceof OneShot) {
+      this.topBottom.bottom.stopSamples();
     }
   }
 

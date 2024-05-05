@@ -58,7 +58,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
-    reverbSendGain: 0.5,
+    reverbSendGain: 0,
   },
   rain: {
     id: "rain",
@@ -77,7 +77,7 @@ export const padLooperPresets: { [key: string]: PadLooperPreset } = {
       sustain: 1,
       release: 4,
     },
-    reverbSendGain: 0.5,
+    reverbSendGain: 0,
   },
   junoOctave: {
     id: "junoOctave",

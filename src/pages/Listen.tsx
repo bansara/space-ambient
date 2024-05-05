@@ -21,7 +21,7 @@ const Listen: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Listen</IonTitle>
+          {/* <IonTitle>Listen</IonTitle> */}
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
@@ -34,8 +34,12 @@ const Listen: React.FC = () => {
         />
         <div id="listen-container">
           <XYPad
-            onChangeX={ambient.crossFadeLeftRight}
-            onChangeY={ambient.crossFadeLowHigh}
+            onChangeX={
+              ambient[ambient.currentSequence?.currentPreset?.xFunction!]
+            }
+            onChangeY={
+              ambient[ambient.currentSequence?.currentPreset?.yFunction!]
+            }
           />
         </div>
       </IonContent>
