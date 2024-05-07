@@ -19,7 +19,6 @@ interface XYPadProps {
 
 const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
   const ambient = useAmbient();
-  console.log(render, ambient.currentSequence?.currentPreset?.xFunction);
   const touchpadRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLImageElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);

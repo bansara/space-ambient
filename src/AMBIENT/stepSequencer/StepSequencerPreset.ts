@@ -43,7 +43,5 @@ export interface StepSequencerPreset {
   oneShots?: OneShotPreset;
   displayName: string;
   binaural: BinauralPreset;
-  nature: PadLooperPreset;
-  mood: "major" | "minor";
   imgSrc: string;
 }

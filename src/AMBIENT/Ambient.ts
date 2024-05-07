@@ -1,6 +1,4 @@
 import { UI } from "./UI/ui";
-import { BreathSequencer } from "./breathSequencer/BreathSequencer";
-import { BreathSequencerPreset } from "./breathSequencer/BreathSequencerPreset";
 import { Reverb } from "./effects/Reverb";
 import { presets } from "./presets/presets";
 import { Sampler } from "./sampler/Base Classes/Sampler";
@@ -16,7 +14,6 @@ export class Ambient {
   fadeOutTime = 2;
   sequences: { [key: string]: StepSequencer } = {};
   currentSequence: StepSequencer | undefined;
-  breathSequence: BreathSequencer | undefined;
   ui: UI = new UI(this);
   mood: "major" | "minor" = "major";
   x = 0.5;
@@ -41,7 +38,6 @@ export class Ambient {
     this.sequences[id] = new StepSequencer(this, id);
     this.sequences[id].loadPreset(preset);
     this.currentSequence = this.sequences[id];
-    this.mood = preset.mood;
     this.x = SamplerUtils.unscaleFrequency(
       this.sequences[id].outputEq.frequency.value,
       1000,
@@ -69,16 +65,6 @@ export class Ambient {
     );
     this.removeCurrentSequence();
     this.addSequence(newPreset);
-  }
-
-  loadBreathSequence(preset: BreathSequencerPreset): void {
-    if (this.breathSequence) {
-      this.breathSequence.stop();
-      this.breathSequence = undefined;
-    }
-    this.breathSequence = new BreathSequencer(this);
-    this.ui.loadBreathSequence();
-    this.breathSequence.loadBreathPreset(preset);
   }
 
   setFilterFrequency = (value: number, min = 1000, max = 5000): void => {

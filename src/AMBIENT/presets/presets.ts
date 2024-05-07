@@ -8,7 +8,6 @@ import {
   XYFunctions,
 } from "../stepSequencer/StepSequencerPreset";
 import { binauralFrequencies } from "../synths/binaural";
-import { natureSounds } from "./naturePresets";
 import n1 from "../../images/n1.webp";
 import n3 from "../../images/n3.webp";
 
@@ -19,7 +18,6 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     imgSrc: n1,
     tempo: 120,
     sequenceLength: 16,
-    mood: "major",
     // padLoopers: {
     //   low: padLooperPresets.majPentLoop,
     //   high: padLooperPresets.hamsadhwani,
@@ -47,7 +45,6 @@ export const presets: { [key: string]: StepSequencerPreset } = {
       binauralFrequency: binauralFrequencies.theta,
       baseFrequency: FREQUENCIES[notes.C2],
     },
-    nature: natureSounds.ocean,
   },
   // ambientPiano: {
   //   id: "ambientPiano",
@@ -78,7 +75,6 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     imgSrc: n3,
     tempo: 120,
     sequenceLength: 16,
-    mood: "major",
     xFunction: XYFunctions.setFilterFrequency,
     yFunction: XYFunctions.crossFadeTopBottom,
 
@@ -135,6 +131,5 @@ export const presets: { [key: string]: StepSequencerPreset } = {
       binauralFrequency: binauralFrequencies.alpha,
       baseFrequency: FREQUENCIES[notes.C2],
     },
-    nature: natureSounds.birds,
   },
 };
