@@ -22,16 +22,16 @@ export const presets: { [key: string]: StepSequencerPreset } = {
     //   low: padLooperPresets.majPentLoop,
     //   high: padLooperPresets.hamsadhwani,
     // },
-    leftRight: {
-      left: {
-        type: "padLooper",
-        sampler: padLooperPresets.rain,
-      },
-      right: {
-        type: "padLooper",
-        sampler: padLooperPresets.ocean,
-      },
-    },
+    // leftRight: {
+    //   left: {
+    //     type: "padLooper",
+    //     sampler: padLooperPresets.rain,
+    //   },
+    //   right: {
+    //     type: "padLooper",
+    //     sampler: padLooperPresets.ocean,
+    //   },
+    // },
     xFunction: XYFunctions.crossFadeLeftRight,
     yFunction: XYFunctions.setFilterFrequency,
     // transposers: [

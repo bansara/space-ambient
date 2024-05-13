@@ -86,11 +86,15 @@ export const sampleURLs: SampleLibrary = {
   oneShots: {
     test1: {
       url: new URL("oneShots/oneShot1.wav", import.meta.url),
-      fadeOutTime: 0,
+      fadeTime: 0,
     },
     test2: {
       url: new URL("oneShots/oneShot2.wav", import.meta.url),
-      fadeOutTime: 0,
+      fadeTime: 0,
+    },
+    test3: {
+      url: new URL("padLooper/hamsadhwani-5.m4a", import.meta.url),
+      fadeTime: 2,
     },
   },
 };

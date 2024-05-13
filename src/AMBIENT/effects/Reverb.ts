@@ -22,7 +22,7 @@ export class Reverb {
     const convolver = this.context.createConvolver();
 
     // Load impulse response from file
-    const path = new URL("supermassive_ir.wav", import.meta.url);
+    const path = new URL("impulse-bh.wav", import.meta.url);
     const response = await fetch(path);
     const arraybuffer = await response.arrayBuffer();
 

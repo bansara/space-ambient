@@ -64,9 +64,6 @@ export class OneShot {
     this.output.connect(this.sequencer.output);
     this.reverbSend.connect(sequencer.reverbSend);
 
-    if (this.preset.sampleURLs.length < 2) {
-      throw new Error("OneShot requires at least two sample files");
-    }
     this.loadSample(this.preset.sampleURLs[this.sampleURLIndex]).then(
       this.assignToSampleBuffer
     );
@@ -81,7 +78,7 @@ export class OneShot {
       length: audioBuffer.duration,
       isLoaded: true,
       isPlaying: false,
-      fadeOutTime: sample.fadeOutTime,
+      fadeOutTime: sample.fadeTime,
     };
   }
 
@@ -106,7 +103,12 @@ export class OneShot {
     sample.source.buffer = sample.buffer;
     const gain = playNextIndex === 2 ? this.sample1Gain : this.sample2Gain;
     gain.gain.cancelAndHoldAtTime(this.context.currentTime);
-    gain.gain.setValueAtTime(1, this.context.currentTime);
+    if (this.preset.shouldCrossfade) {
+      gain.gain.setValueAtTime(0, this.context.currentTime);
+      gain.gain.linearRampToValueAtTime(1, time + sample.fadeOutTime / 3);
+    } else {
+      gain.gain.setValueAtTime(1, this.context.currentTime);
+    }
     sample.source.connect(gain);
     sample.source.start(time);
     this.currentSampleStartTime = time;
@@ -116,7 +118,7 @@ export class OneShot {
       gain.gain.setTargetAtTime(
         0,
         time + sample.length - sample.fadeOutTime,
-        sample.fadeOutTime / 5
+        sample.fadeOutTime / 2
       );
     }
 

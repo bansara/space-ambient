@@ -5,7 +5,6 @@ import { TransposeBuffer } from "./TransposeBuffer";
 import { Ambient } from "../../Ambient";
 import { TransposerPreset } from "./TransposerPreset";
 import { StepSequencer } from "../../stepSequencer/StepSequencer";
-import { BreathSequencer } from "../../breathSequencer/BreathSequencer";
 
 export class Transposer extends Sampler {
   isTransposer = true;
@@ -28,7 +27,7 @@ export class Transposer extends Sampler {
 
   constructor(
     ambient: Ambient,
-    sequencer: StepSequencer | BreathSequencer,
+    sequencer: StepSequencer,
     preset: TransposerPreset
   ) {
     super(ambient, preset.path, sequencer);

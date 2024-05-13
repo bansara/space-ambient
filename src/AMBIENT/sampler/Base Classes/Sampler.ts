@@ -5,7 +5,6 @@ import { SampleBuffer } from "./SampleBuffer";
 import { Ambient } from "../../Ambient";
 import { SamplerUtils } from "./SamplerUtils";
 import { StepSequencer } from "../../stepSequencer/StepSequencer";
-import { BreathSequencer } from "../../breathSequencer/BreathSequencer";
 
 export abstract class Sampler {
   ambient: Ambient;
