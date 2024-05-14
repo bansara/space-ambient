@@ -15,6 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import n2 from "../images/n2.webp";
 import { logInOutline, logOutOutline } from "ionicons/icons";
 import Player from "../components/Player";
+import { FirebaseError } from "firebase/app";
 
 const Login = () => {
   const { user, logout } = useAuth();
@@ -24,7 +25,9 @@ const Login = () => {
       await signInWithGooglePopup();
       router.push("/about");
     } catch (error) {
-      console.log("Error signing in: ", error);
+      if (error instanceof FirebaseError) {
+        console.log("Error signing in: ", error.message);
+      }
     }
   };
 
