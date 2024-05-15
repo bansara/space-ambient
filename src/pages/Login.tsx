@@ -16,6 +16,7 @@ import n2 from "../images/n2.webp";
 import { logInOutline, logOutOutline } from "ionicons/icons";
 import Player from "../components/Player";
 import { FirebaseError } from "firebase/app";
+import { Purchases } from "@revenuecat/purchases-capacitor";
 
 const Login = () => {
   const { user, logout } = useAuth();

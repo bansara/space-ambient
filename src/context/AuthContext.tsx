@@ -14,6 +14,7 @@ import {
 } from "react";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { Redirect } from "react-router";
+import { Purchases } from "@revenuecat/purchases-capacitor";
 
 interface AuthProps {
   user?: User | UserCredential | null;
@@ -54,6 +55,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Listener for auth state changes
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("AUTH CHANGED: ", user);
+      if (user) {
+        Purchases.logIn({ appUserID: user.uid });
+      }
+
       setUser(user);
       setInitialized(true);
     });

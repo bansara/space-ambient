@@ -42,10 +42,30 @@ import { AmbientProvider, useAmbient } from "./AMBIENT/react";
 import Listen from "./pages/Listen";
 import List from "./pages/List";
 
+import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
+import { useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
+
 setupIonicReact();
 
 const AuthLayout: React.FC = () => {
   const { initialized } = useAuth();
+
+  useEffect(() => {
+    (async function () {
+      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
+      if (Capacitor.getPlatform() === "ios") {
+        await Purchases.configure({
+          apiKey: "appl_fKPmGliwDGflaGwMEEWhVSJaLCj",
+        });
+        const offerings = await Purchases.getOfferings();
+        console.log("OFFERINGS: ", offerings);
+        if (offerings.current) {
+          console.log("CURRENT OFFERING: ", offerings.current);
+        }
+      }
+    })();
+  }, []);
 
   return (
     <IonApp>
