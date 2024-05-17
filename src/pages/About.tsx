@@ -53,7 +53,7 @@ const About: React.FC = () => {
           </div>
         </div>
       </IonContent>
-      <Player />
+      {isPremiumUser && <Player />}
     </IonPage>
   );
 };

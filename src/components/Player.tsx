@@ -25,8 +25,18 @@ const Player = () => {
         color="primary"
         onIonInput={(e) => setRangeVolume(e.detail.value as number)}
       >
-        <IonIcon slot="start" size="small" icon={volumeLow} />
-        <IonIcon slot="end" size="small" icon={volumeHigh} />
+        <IonIcon
+          slot="start"
+          size="small"
+          icon={volumeLow}
+          className="vol-icon"
+        />
+        <IonIcon
+          slot="end"
+          size="small"
+          icon={volumeHigh}
+          className="vol-icon"
+        />
       </IonRange>
     </div>
   );

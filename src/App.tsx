@@ -44,33 +44,13 @@ import List from "./pages/List";
 import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
 import { useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
+import useRevenueCat from "./Hooks/useRevenueCat";
 
 setupIonicReact();
 
 const AuthLayout: React.FC = () => {
   const { initialized } = useAuth();
-
-  useEffect(() => {
-    (async function () {
-      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
-      if (Capacitor.getPlatform() === "ios") {
-        await Purchases.configure({
-          apiKey: "appl_fKPmGliwDGflaGwMEEWhVSJaLCj",
-        });
-        const offerings = await Purchases.getOfferings();
-        console.log("OFFERINGS: ", offerings);
-        // if (
-        //   offerings.current !== null &&
-        //   offerings.current.availablePackages.length !== 0
-        // ) {
-        //   // Display packages for sale
-        //   offerings.current.availablePackages.forEach((item, index) => {
-        //     console.log("PACKAGE: " + index, item);
-        //   });
-        // }
-      }
-    })();
-  }, []);
+  const { offerings, customerInfo, isPremiumUser } = useRevenueCat();
 
   return (
     <IonApp>

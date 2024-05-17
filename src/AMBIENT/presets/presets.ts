@@ -14,6 +14,7 @@ import n3 from "../../images/n3.webp";
 export const presets: { [key: string]: StepSequencerPreset } = {
   default: {
     id: "default",
+    isPremiumContent: false,
     displayName: "Zen Beach",
     imgSrc: n1,
     tempo: 120,
@@ -72,6 +73,7 @@ export const presets: { [key: string]: StepSequencerPreset } = {
   hamsadhwani: {
     id: "hamsadhwani",
     displayName: "Hamsadhwani",
+    isPremiumContent: true,
     imgSrc: n3,
     tempo: 120,
     sequenceLength: 16,
@@ -85,7 +87,7 @@ export const presets: { [key: string]: StepSequencerPreset } = {
       },
       bottom: {
         type: "padLooper",
-        sampler: padLooperPresets.ocean,
+        sampler: padLooperPresets.majPentLoop,
       },
     },
     leftRight: {

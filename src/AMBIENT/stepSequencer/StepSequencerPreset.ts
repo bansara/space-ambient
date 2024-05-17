@@ -44,4 +44,5 @@ export interface StepSequencerPreset {
   displayName: string;
   binaural: BinauralPreset;
   imgSrc: string;
+  isPremiumContent: boolean;
 }
