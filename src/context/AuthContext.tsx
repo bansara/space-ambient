@@ -37,21 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    // Check for the result of a redirect operation such as signInWithRedirect.
-    // getRedirectResult(FIREBASE_AUTH)
-    //   .then((result) => {
-    //     if (result) {
-    //       // There's a user object after the redirect—no need to set the user here
-    //       // as onAuthStateChanged will trigger immediately after with the user.
-    //       console.log("Redirect login successful: ", result.user);
-    //       setUser(result.user);
-    //       setInitialized(true);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Redirect result failed: ", error);
-    //   });
-
     // Listener for auth state changes
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("AUTH CHANGED: ", user);

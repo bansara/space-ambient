@@ -7,7 +7,6 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import firebase from "firebase/app";
 import "firebase/auth";
 import Menu from "./components/Menu";
 import Page from "./pages/Page";
@@ -60,9 +59,15 @@ const AuthLayout: React.FC = () => {
         });
         const offerings = await Purchases.getOfferings();
         console.log("OFFERINGS: ", offerings);
-        if (offerings.current) {
-          console.log("CURRENT OFFERING: ", offerings.current);
-        }
+        // if (
+        //   offerings.current !== null &&
+        //   offerings.current.availablePackages.length !== 0
+        // ) {
+        //   // Display packages for sale
+        //   offerings.current.availablePackages.forEach((item, index) => {
+        //     console.log("PACKAGE: " + index, item);
+        //   });
+        // }
       }
     })();
   }, []);
@@ -76,7 +81,7 @@ const AuthLayout: React.FC = () => {
             <IonRouterOutlet id="main">
               <AuthenticatedRoute>
                 <Route path="/" exact={true}>
-                  <Redirect to="/about" />
+                  <Redirect to="/list" />
                 </Route>
                 <Route path="/folder/:name" exact={true} component={Page} />
                 <Route path="/about" exact={true} component={About} />

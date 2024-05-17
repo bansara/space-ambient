@@ -24,7 +24,7 @@ const Login = () => {
   const handleSignIn = async () => {
     try {
       await signInWithGooglePopup();
-      router.push("/about");
+      router.push("/list");
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.log("Error signing in: ", error.message);

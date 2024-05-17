@@ -1,14 +1,14 @@
 #player-container {
   position: fixed;
-  bottom: 0;
+  bottom: 1.5rem;
   width: 400px;
-  max-width: 100%;
+  max-width: 90%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-radius: 0;
+  border-radius: 2rem;
   z-index: 10;
   padding-block: 0.5rem;
 

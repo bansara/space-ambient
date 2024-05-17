@@ -76,7 +76,7 @@ export class Ambient {
     outputEq.frequency.cancelAndHoldAtTime(this.context.currentTime);
     outputEq.frequency.linearRampToValueAtTime(
       targetFrequency,
-      this.context.currentTime + 0.2
+      this.context.currentTime + 0.01
     );
   };
   setTransposerProbability = (y: number): void => {

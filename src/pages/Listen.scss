@@ -4,3 +4,9 @@
   align-items: center;
   height: 100%;
 }
+
+ion-content {
+  .background {
+    z-index: 0;
+  }
+}

@@ -21,7 +21,7 @@ const List: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>List</IonTitle>
+          {/* <IonTitle>List</IonTitle> */}
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
