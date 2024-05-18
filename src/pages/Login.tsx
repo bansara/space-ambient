@@ -1,8 +1,11 @@
+import { useState } from "react";
 import {
   IonButtons,
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
+  IonItem,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -10,20 +13,36 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import "./Login.scss";
-import { signInWithGooglePopup } from "../../firebaseConfig";
+import { signInWithApple, signInWithGoogle } from "../../firebaseConfig";
 import { useAuth } from "../context/AuthContext";
 import n2 from "../images/n2.webp";
 import { logInOutline, logOutOutline } from "ionicons/icons";
 import Player from "../components/Player";
 import { FirebaseError } from "firebase/app";
-import { Purchases } from "@revenuecat/purchases-capacitor";
+import EmailLogin from "../components/EmailLogin";
+import { Capacitor } from "@capacitor/core";
 
 const Login = () => {
   const { user, logout } = useAuth();
+
   const router = useIonRouter();
-  const handleSignIn = async () => {
+
+  const handleSignInWithGoogle = async () => {
     try {
-      await signInWithGooglePopup();
+      const result = await signInWithGoogle();
+      console.log("Google sign in result: ", result);
+      router.push("/list");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.log("Error signing in: ", error.message);
+        console.log(JSON.stringify(error));
+      }
+    }
+  };
+  const handleSignInWithApple = async () => {
+    try {
+      const result = await signInWithApple();
+      console.log("Apple sign in result: ", result);
       router.push("/list");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -61,11 +80,20 @@ const Login = () => {
           {user ? (
             <button onClick={logout}>Sign out</button>
           ) : (
-            <button onClick={handleSignIn}>Sign in with Google</button>
+            <div>
+              <button onClick={handleSignInWithGoogle}>
+                Sign in with Google
+              </button>
+              {Capacitor.isNativePlatform() &&
+                Capacitor.getPlatform() === "ios" && (
+                  <button onClick={handleSignInWithApple}>
+                    Sign in with Apple
+                  </button>
+                )}
+            </div>
           )}
         </div>
       </div>
-      <Player />
     </IonPage>
   );
 };

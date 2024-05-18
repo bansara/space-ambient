@@ -1,10 +1,4 @@
-import {
-  User,
-  UserCredential,
-  getRedirectResult,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   ReactNode,
   createContext,
@@ -17,7 +11,7 @@ import { Redirect } from "react-router";
 import { Purchases } from "@revenuecat/purchases-capacitor";
 
 interface AuthProps {
-  user?: User | UserCredential | null;
+  user?: User | null;
   initialized?: boolean;
   logout?: () => Promise<void>;
 }
@@ -43,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (user) {
         Purchases.logIn({ appUserID: user.uid });
       }
-
       setUser(user);
       setInitialized(true);
     });
