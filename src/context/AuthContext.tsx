@@ -1,4 +1,4 @@
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   ReactNode,
   createContext,
@@ -9,6 +9,8 @@ import {
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { Redirect } from "react-router";
 import { Purchases } from "@revenuecat/purchases-capacitor";
+import { Capacitor } from "@capacitor/core";
+import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 
 interface AuthProps {
   user?: User | null;
@@ -16,10 +18,18 @@ interface AuthProps {
   logout?: () => Promise<void>;
 }
 
+const signOutUser = async () => {
+  if (Capacitor.isNativePlatform()) {
+    await FirebaseAuthentication.signOut();
+  }
+
+  await signOut(FIREBASE_AUTH);
+};
+
 export const AuthContext = createContext<AuthProps>({
   user: null,
   initialized: false,
-  logout: () => signOut(FIREBASE_AUTH),
+  logout: () => signOutUser(),
 });
 
 export function useAuth() {
@@ -45,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     initialized,
-    logout: () => signOut(FIREBASE_AUTH),
+    logout: () => signOutUser(),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

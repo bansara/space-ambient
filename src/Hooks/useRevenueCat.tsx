@@ -30,6 +30,7 @@ const useRevenueCat = () => {
             setOfferings(offerings.current.availablePackages);
           }
           const customerInfo = await Purchases.getCustomerInfo();
+          console.log(customerInfo.customerInfo.entitlements);
           setCustomerInfo(customerInfo.customerInfo);
           if (customerInfo.customerInfo.entitlements.active["Premium"]) {
             setIsPremiumUser(true);
