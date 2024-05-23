@@ -8,11 +8,12 @@ ion-card.glassmorphic {
   }
 
   ion-card-content.glassmorphic {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: transparent;
     border-radius: 0 0 1rem 1rem;
     padding-top: 1rem;
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 
   ion-card-title {

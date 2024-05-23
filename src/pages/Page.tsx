@@ -20,7 +20,7 @@ const Page: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Listen</IonTitle>
+          <IonTitle>I'm a page!</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -28,7 +28,7 @@ const Page: React.FC = () => {
         fullscreen
         style={{ "--background": `url(${n2}) no-repeat center center / cover` }}
       >
-        {/* <img src={n2} className="background" /> */}
+        <h1>Hi I'm a page!</h1>
       </IonContent>
       <Player />
     </IonPage>

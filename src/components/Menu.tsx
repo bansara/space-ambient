@@ -41,12 +41,12 @@ const appPages: AppPage[] = [
     iosIcon: personCircleOutline,
     mdIcon: personCircleSharp,
   },
-  {
-    title: "Listen",
-    url: "/listen",
-    iosIcon: informationOutline,
-    mdIcon: informationSharp,
-  },
+  // {
+  //   title: "Listen",
+  //   url: "/listen",
+  //   iosIcon: informationOutline,
+  //   mdIcon: informationSharp,
+  // },
   {
     title: "Logout",
     url: "/auth",

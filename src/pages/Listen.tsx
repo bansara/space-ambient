@@ -1,4 +1,5 @@
 import {
+  IonBackButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -14,24 +15,19 @@ import Player from "../components/Player";
 import "./Listen.scss";
 import XYPad from "../components/XYPad/XYPad";
 import { useAmbient } from "../AMBIENT/react";
-import { Purchases } from "@revenuecat/purchases-capacitor";
 
 const Listen: React.FC = () => {
   const ambient = useAmbient();
-
-  useEffect(() => {
-    Purchases.getCustomerInfo().then((info) => {
-      console.log("CUSTOMER INFO: ", info);
-    });
-  }, []);
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           {/* <IonTitle>Listen</IonTitle> */}
           <IonButtons slot="start">
-            <IonMenuButton />
+            <IonBackButton text="" />
+            {/* <IonMenuButton /> */}
           </IonButtons>
+          <IonButtons slot="end"></IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent scrollY={false}>

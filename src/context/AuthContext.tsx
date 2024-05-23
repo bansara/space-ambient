@@ -11,6 +11,7 @@ import { Redirect } from "react-router";
 import { Purchases } from "@revenuecat/purchases-capacitor";
 import { Capacitor } from "@capacitor/core";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 
 interface AuthProps {
   user?: User | null;

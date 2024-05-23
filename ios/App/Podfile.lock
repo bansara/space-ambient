@@ -10,6 +10,14 @@ PODS:
   - CapacitorApp (5.0.7):
     - Capacitor
   - CapacitorCordova (5.7.5)
+  - CapacitorFirebaseAnalytics (5.4.1):
+    - Capacitor
+    - CapacitorFirebaseAnalytics/Lite (= 5.4.1)
+  - CapacitorFirebaseAnalytics/Analytics (5.4.1):
+    - Capacitor
+    - FirebaseAnalytics (~> 10.8)
+  - CapacitorFirebaseAnalytics/Lite (5.4.1):
+    - Capacitor
   - CapacitorFirebaseAuthentication (5.4.1):
     - Capacitor
     - CapacitorFirebaseAuthentication/Lite (= 5.4.1)
@@ -148,6 +156,8 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorFirebaseAnalytics (from `../../node_modules/@capacitor-firebase/analytics`)"
+  - "CapacitorFirebaseAnalytics/Analytics (from `../../node_modules/@capacitor-firebase/analytics`)"
   - "CapacitorFirebaseAuthentication (from `../../node_modules/@capacitor-firebase/authentication`)"
   - "CapacitorFirebaseAuthentication/Google (from `../../node_modules/@capacitor-firebase/authentication`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
@@ -186,6 +196,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/app"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorFirebaseAnalytics:
+    :path: "../../node_modules/@capacitor-firebase/analytics"
   CapacitorFirebaseAuthentication:
     :path: "../../node_modules/@capacitor-firebase/authentication"
   CapacitorHaptics:
@@ -202,6 +214,7 @@ SPEC CHECKSUMS:
   Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
   CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
   CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
+  CapacitorFirebaseAnalytics: dfccb704820bb7db82debbc05fded24b096bed71
   CapacitorFirebaseAuthentication: 4b5146252052345d7c0cd8147dd4f1372a65e99b
   CapacitorHaptics: 7c7c206f0c96a628fed073830c96d28c4b2e772e
   CapacitorKeyboard: aec619a578235c6ce279075009a2689c2cf5c42c
@@ -225,6 +238,6 @@ SPEC CHECKSUMS:
   RevenueCat: 0250867579677899de94f96ad9be342be865560f
   RevenuecatPurchasesCapacitor: 3356d0d375cf40dcde55555cbcff43eb9a99e7c0
 
-PODFILE CHECKSUM: 1d426117794d87b287c73a77d5105d23a16fdbc5
+PODFILE CHECKSUM: 30776e614780943541035def00d34e19e00dad89
 
 COCOAPODS: 1.15.2

@@ -6,11 +6,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import "./XYPad.scss";
-import ship from "../../images/ship.webp";
 import { useAmbient } from "../../AMBIENT/react";
-import { OneShot } from "../../AMBIENT/sampler/OneShot/OneShot";
-import { Sampler } from "../../AMBIENT/sampler/Base Classes/Sampler";
-import { render } from "@testing-library/react";
 
 interface XYPadProps {
   onChangeX: (x: number) => void;
@@ -149,7 +145,8 @@ const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
 
   return (
     <div ref={touchpadRef} className="touchpad glassmorphic">
-      <img src={ship} ref={ballRef} className="ball" />
+      {/* <img src={ship} ref={ballRef} className="ball" /> */}
+      <div ref={ballRef} className="ball" />
     </div>
   );
 };

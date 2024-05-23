@@ -1,11 +1,7 @@
-import { useState } from "react";
 import {
   IonButtons,
-  IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -17,9 +13,7 @@ import { signInWithApple, signInWithGoogle } from "../../firebaseConfig";
 import { useAuth } from "../context/AuthContext";
 import n2 from "../images/n2.webp";
 import { logInOutline, logOutOutline } from "ionicons/icons";
-import Player from "../components/Player";
 import { FirebaseError } from "firebase/app";
-import EmailLogin from "../components/EmailLogin";
 import { Capacitor } from "@capacitor/core";
 
 const Login = () => {
