@@ -10,40 +10,19 @@ import {
 import "./Card.scss";
 import { StepSequencerPreset } from "../AMBIENT/stepSequencer/StepSequencerPreset";
 import { useAmbient } from "../AMBIENT/react";
-import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
+import useRevenueCat from "../Hooks/useRevenueCat";
 
 interface CardProps {
   preset: StepSequencerPreset;
+  onSelect: () => void;
 }
 
-const logEvent = async (preset: StepSequencerPreset) => {
-  await FirebaseAnalytics.logEvent({
-    name: "preview_preset",
-    params: { preset: preset.displayName },
-  });
-  await FirebaseAnalytics.logEvent({
-    name: "load_preset",
-    params: { preset: preset.displayName },
-  });
-};
-
-const Card: React.FC<CardProps> = ({ preset }) => {
-  const ambient = useAmbient();
-  const router = useIonRouter();
-  const handlePreview = () => {
-    logEvent(preset);
-
-    ambient.currentSequence
-      ? ambient.changeSequence(preset)
-      : ambient.addSequence(preset);
-    router.push("/listen");
-  };
+const Card: React.FC<CardProps> = ({ preset, onSelect }) => {
   return (
-    <IonCard className="glassmorphic" onClick={handlePreview}>
+    <IonCard className="glassmorphic" onClick={onSelect}>
       <img alt={preset.displayName} src={preset.imgSrc} />
       <IonCardHeader>
         <IonCardTitle>{preset.displayName}</IonCardTitle>
-        {/* <IonCardSubtitle>Card Subtitle</IonCardSubtitle> */}
       </IonCardHeader>
     </IonCard>
   );

@@ -36,7 +36,9 @@ export abstract class Sampler {
     this.outputEq.connect(this.output);
     this.outputEq.connect(this.reverbSend);
     this.output.connect(this.sequencer.output);
-    this.loadSample(path);
+    this.loadSample(path).then(() => {
+      console.log("Sample loaded");
+    });
   }
 
   loadSample(path: URL, sampleBase?: notes): Promise<void> {

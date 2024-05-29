@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("AUTH CHANGED: ", user);
       if (user) {
         Purchases.logIn({ appUserID: user.uid });
+        console.log(user);
       }
       setUser(user);
       setInitialized(true);

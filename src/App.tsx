@@ -1,8 +1,12 @@
 import {
   IonApp,
+  IonIcon,
+  IonLabel,
   IonLoading,
   IonRouterOutlet,
-  IonSplitPane,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -41,32 +45,44 @@ import Listen from "./pages/Listen";
 import List from "./pages/List";
 
 import useRevenueCat from "./Hooks/useRevenueCat";
+import { home, person, volumeHigh } from "ionicons/icons";
+import { GiSoundWaves } from "react-icons/gi";
 
 setupIonicReact();
 
 const AuthLayout: React.FC = () => {
-  const { initialized } = useAuth();
+  const { initialized, user } = useAuth();
   const { offerings, customerInfo, isPremiumUser } = useRevenueCat();
 
   return (
     <IonApp>
       {initialized ? (
         <IonReactRouter>
-          <IonSplitPane contentId="main">
-            <Menu />
-            <IonRouterOutlet id="main">
+          <IonTabs>
+            <IonRouterOutlet animated={true}>
               <AuthenticatedRoute>
                 <Route path="/" exact={true}>
                   <Redirect to="/list" />
                 </Route>
-                <Route path="/about" exact={true} component={About} />
                 <Route path="/list" exact={true} component={List} />
-                <Route path="/listen" exact={true} component={Listen} />
                 <Route path="/auth" exact={true} component={Login} />
+                <Route path="/listen" exact={true} component={Listen} />
               </AuthenticatedRoute>
               <Route path="/auth" exact={true} component={Login} />
             </IonRouterOutlet>
-          </IonSplitPane>
+            {user ? (
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="list" href="/list">
+                  <GiSoundWaves size={48} />
+                </IonTabButton>
+                <IonTabButton tab="login" href="/auth">
+                  <IonIcon icon={person} />
+                </IonTabButton>
+              </IonTabBar>
+            ) : (
+              <IonTabBar slot="bottom"></IonTabBar>
+            )}
+          </IonTabs>
         </IonReactRouter>
       ) : (
         <IonLoading isOpen={!initialized} />

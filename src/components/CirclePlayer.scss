@@ -1,0 +1,10 @@
+#circle-player {
+  z-index: 10;
+  ion-button {
+    --ripple-color: transparent;
+  }
+  ion-icon {
+    font-size: 128px;
+    color: var(--ion-color-primary);
+  }
+}

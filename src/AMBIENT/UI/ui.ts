@@ -13,9 +13,11 @@ export class UI extends EventEmitter {
     this.ambient = ambient;
   }
   presetChange(preset: StepSequencerPreset) {
+    console.log("presetChange");
     this.emit("presetChange", preset);
   }
   playCurrentSequence(): void {
+    console.log("playCurrentSequence");
     this.ambient.currentSequence?.play();
     this.emit("playCurrentSequence");
   }

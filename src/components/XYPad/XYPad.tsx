@@ -147,6 +147,8 @@ const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
     <div ref={touchpadRef} className="touchpad glassmorphic">
       {/* <img src={ship} ref={ballRef} className="ball" /> */}
       <div ref={ballRef} className="ball" />
+      <div className="vertical-text">warmth</div>
+      <div className="bottom-text">dimension</div>
     </div>
   );
 };

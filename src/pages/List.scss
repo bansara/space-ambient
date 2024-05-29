@@ -1,7 +1,4 @@
 #card-wrapper {
-  display: flex;
-  justify-content: center;
-
   #card-container {
     display: flex;
     flex-direction: column;
@@ -14,4 +11,8 @@
       flex-wrap: wrap;
     }
   }
+}
+
+#dark-bg {
+  --background: var(--ion-color-step-50);
 }

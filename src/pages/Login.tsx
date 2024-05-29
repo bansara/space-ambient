@@ -1,8 +1,11 @@
 import {
+  IonButton,
   IonButtons,
+  IonContent,
   IonHeader,
   IonIcon,
   IonMenuButton,
+  IonModal,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -15,16 +18,19 @@ import n2 from "../images/n2.webp";
 import { logInOutline, logOutOutline } from "ionicons/icons";
 import { FirebaseError } from "firebase/app";
 import { Capacitor } from "@capacitor/core";
+import { useRef } from "react";
+import PrivacyPolicy from "../components/Privacy";
+import TermsOfService from "../components/Terms";
 
 const Login = () => {
   const { user, logout } = useAuth();
-
   const router = useIonRouter();
+  const privacyModal = useRef<HTMLIonModalElement>(null);
+  const termsModal = useRef<HTMLIonModalElement>(null);
 
   const handleSignInWithGoogle = async () => {
     try {
       const result = await signInWithGoogle();
-      console.log("Google sign in result: ", result);
       router.push("/list");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -49,12 +55,7 @@ const Login = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          {user && (
-            <IonButtons slot="start">
-              <IonMenuButton />
-            </IonButtons>
-          )}
-          <IonTitle>{user ? "Sign Out" : "Sign In"}</IonTitle>
+          {/* <IonTitle>{user ? "Sign Out" : "Sign In"}</IonTitle> */}
         </IonToolbar>
       </IonHeader>
       <div id="auth-container">
@@ -84,6 +85,58 @@ const Login = () => {
                     Sign in with Apple
                   </button>
                 )}
+              <div className="legal-buttons">
+                <IonButton
+                  id="privacy-modal"
+                  fill="clear"
+                  className="legal-button"
+                >
+                  Privacy Policy
+                </IonButton>
+                <IonButton
+                  id="terms-modal"
+                  fill="clear"
+                  className="legal-button"
+                >
+                  Terms of Service
+                </IonButton>
+              </div>
+              <IonModal ref={privacyModal} trigger="privacy-modal">
+                <IonHeader>
+                  <IonToolbar>
+                    <IonTitle>Privacy Policy</IonTitle>
+                    <IonButtons slot="end">
+                      <IonButton
+                        strong={true}
+                        onClick={() => privacyModal.current?.dismiss()}
+                      >
+                        Close
+                      </IonButton>
+                    </IonButtons>
+                  </IonToolbar>
+                </IonHeader>
+                <IonContent className="ion-padding">
+                  <PrivacyPolicy />
+                </IonContent>
+              </IonModal>
+              <IonModal ref={termsModal} trigger="terms-modal">
+                <IonHeader>
+                  <IonToolbar>
+                    <IonTitle>Terms of Service</IonTitle>
+                    <IonButtons slot="end">
+                      <IonButton
+                        strong={true}
+                        onClick={() => termsModal.current?.dismiss()}
+                      >
+                        Close
+                      </IonButton>
+                    </IonButtons>
+                  </IonToolbar>
+                </IonHeader>
+                <IonContent className="ion-padding">
+                  <TermsOfService />
+                </IonContent>
+              </IonModal>
             </div>
           )}
         </div>

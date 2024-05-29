@@ -15,12 +15,13 @@ import Player from "../components/Player";
 import "./Listen.scss";
 import XYPad from "../components/XYPad/XYPad";
 import { useAmbient } from "../AMBIENT/react";
+import CirclePlayer from "../components/CIrclePlayer";
 
 const Listen: React.FC = () => {
   const ambient = useAmbient();
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader translucent={true} mode="ios">
         <IonToolbar>
           {/* <IonTitle>Listen</IonTitle> */}
           <IonButtons slot="start">
@@ -30,12 +31,12 @@ const Listen: React.FC = () => {
           <IonButtons slot="end"></IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent scrollY={false}>
-        <img
-          src={ambient.currentSequence?.currentPreset?.imgSrc}
-          className="background"
-        />
+      <IonContent scrollY={false} fullscreen>
         <div id="listen-container">
+          <img
+            src={ambient.currentSequence?.currentPreset?.imgSrc}
+            className="background"
+          />
           <XYPad
             onChangeX={
               ambient[ambient.currentSequence?.currentPreset?.xFunction!]
@@ -44,9 +45,10 @@ const Listen: React.FC = () => {
               ambient[ambient.currentSequence?.currentPreset?.yFunction!]
             }
           />
+          <CirclePlayer />
         </div>
       </IonContent>
-      <Player />
+      {/* <Player /> */}
     </IonPage>
   );
 };

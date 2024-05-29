@@ -29,4 +29,15 @@
     margin: 1rem auto;
     width: 90%;
   }
+
+  .legal-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .legal-button {
+    color: white;
+    font-size: 0.75rem;
+  }
 }
