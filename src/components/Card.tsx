@@ -20,7 +20,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ preset, onSelect }) => {
   return (
     <IonCard className="glassmorphic" onClick={onSelect}>
-      <img alt={preset.displayName} src={preset.imgSrc} />
+      {/* <img alt={preset.displayName} src={preset.imgSrc} /> */}
       <IonCardHeader>
         <IonCardTitle>{preset.displayName}</IonCardTitle>
       </IonCardHeader>

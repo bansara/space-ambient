@@ -7,7 +7,11 @@ const CirclePlayer = () => {
   const { isPlaying, togglePlay } = usePlayButton();
   return (
     <div id="circle-player">
-      <IonButton fill="clear" onClick={togglePlay} aria-label="Toggle Play">
+      <IonButton
+        fill="clear"
+        onTouchStart={togglePlay}
+        aria-label="Toggle Play"
+      >
         {isPlaying ? (
           <IonIcon ios={pauseCircle} md={pauseCircle} slot="icon-only" />
         ) : (

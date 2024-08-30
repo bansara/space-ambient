@@ -4,7 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 
 :root {
-  --ion-color-primary: #575cf0;
+  --ion-color-primary: #8bc7d7;
   --ion-color-primary-rgb: 74, 79, 206;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -157,13 +157,13 @@ http://ionicframework.com/docs/theming/ */
 }
 
 html {
-  font-family: "Orbitron", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  letter-spacing: 0.2ch;
+  /* letter-spacing: 0.2ch; */
 
-  --ion-font-family: "Orbitron", sans-serif;
+  --ion-font-family: "Poppins", sans-serif;
   /* For more information on dynamic font scaling, visit the documentation: 
   https://ionicframework.com/docs/layout/dynamic-font-scaling */
   --ion-dynamic-font: var(--ion-default-dynamic-font);

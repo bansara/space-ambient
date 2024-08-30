@@ -7,11 +7,19 @@ import React, {
 } from "react";
 import "./XYPad.scss";
 import { useAmbient } from "../../AMBIENT/react";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface XYPadProps {
   onChangeX: (x: number) => void;
   onChangeY: (y: number) => void;
 }
+
+const hapticsSelectionStart = async () => {
+  await Haptics.impact({ style: ImpactStyle.Medium });
+};
+const hapticsSelectionEnd = async () => {
+  await Haptics.impact({ style: ImpactStyle.Light });
+};
 
 const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
   const ambient = useAmbient();
@@ -63,7 +71,7 @@ const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
 
   const startDrag = useCallback((e: MouseEvent | TouchEvent) => {
     if (!ballRef.current) return;
-
+    hapticsSelectionStart();
     const { clientX, clientY } = getEventPosition(e);
 
     setIsDragging(true);
@@ -129,6 +137,7 @@ const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
 
     // Touch events
     ball.addEventListener("touchstart", startDragHandler);
+    ball.addEventListener("touchend", hapticsSelectionEnd);
     window.addEventListener("touchmove", dragHandler);
     window.addEventListener("touchend", endDragHandler);
 
@@ -138,6 +147,7 @@ const XYPad: React.FC<XYPadProps> = ({ onChangeX, onChangeY }) => {
       window.removeEventListener("mouseup", endDragHandler);
 
       ball.removeEventListener("touchstart", startDragHandler);
+      ball.removeEventListener("touchend", hapticsSelectionEnd);
       window.removeEventListener("touchmove", dragHandler);
       window.removeEventListener("touchend", endDragHandler);
     };

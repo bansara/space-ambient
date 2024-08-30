@@ -7,6 +7,9 @@ import { OneShot } from "./sampler/OneShot/OneShot";
 import { StepSequencer } from "./stepSequencer/StepSequencer";
 import { StepSequencerPreset } from "./stepSequencer/StepSequencerPreset";
 import { createContext } from "./utils/index";
+import { BackgroundTask } from "@capawesome/capacitor-background-task";
+import { App as CapApp } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
 
 export class Ambient {
   context: AudioContext;
@@ -19,6 +22,7 @@ export class Ambient {
   x = 0.5;
   y = 0.5;
   reverb: Reverb;
+  audioWorkletNode: AudioWorkletNode | undefined;
 
   constructor() {
     this.context = createContext();
@@ -31,7 +35,29 @@ export class Ambient {
     // TODO: DELETE BEFORE PRODUCTION
     // @ts-ignore
     window.ambient = this;
+    this.setupBackgroundTask();
+    // this.initializeWorklet().then(() => {
+    //   this.audioWorkletNode!.port.onmessage = (event) => {
+    //     const audioData = event.data.audioData;
+
+    //     // Here, you should send the audio data to the native plugin
+    //     // For demonstration, let's assume you have a Capacitor plugin named "AudioPlugin"
+    //     // and a method "playAudio" that accepts audio data
+
+    //     // Capacitor.Plugins.AudioPlugin.playAudio({ audioData });
+    //   };
+    // });
   }
+
+  initializeWorklet = async () => {
+    await this.context.audioWorklet.addModule("worklet-processor.js");
+
+    this.audioWorkletNode = new AudioWorkletNode(this.context, "processor");
+
+    // Connect the gain node to the AudioWorkletNode
+    this.masterVol.connect(this.audioWorkletNode);
+    this.audioWorkletNode.connect(this.context.destination);
+  };
 
   addSequence(preset: StepSequencerPreset): void {
     const { id } = preset;
@@ -135,4 +161,36 @@ export class Ambient {
       this.context.currentTime + 0.01
     );
   };
+  setupBackgroundTask() {
+    // CapApp.addListener("appStateChange", async ({ isActive }) => {
+    //   console.log("App state changed. isActive:", isActive);
+    //   if (isActive) {
+    //     // When the app becomes active, do nothing if already playing
+    //     if (this.context.state !== "running") {
+    //       await this.context.resume();
+    //     }
+    //     return;
+    //   }
+
+    //   // The app state has been changed to inactive.
+    //   // Start the background task by calling `beforeExit`.
+    //   const taskId = await BackgroundTask.beforeExit(async () => {
+    //     this.ui.stopCurrentSequence();
+    //     // Finish the background task as soon as everything is done.
+    //     BackgroundTask.finish({ taskId });
+    //   });
+    // });
+    CapApp.addListener("pause", async () => {
+      console.log("App is being paused. CONTEXT STATE:  ", this.context.state);
+      // const taskId = await BackgroundTask.beforeExit(async () => {
+      // this.ui.stopCurrentSequence();
+      if (this.context.state !== "running") {
+        await this.context.resume();
+        console.log(this.context.state);
+      }
+      // Finish the background task as soon as everything is done.
+      // BackgroundTask.finish({ taskId });
+      // });
+    });
+  }
 }

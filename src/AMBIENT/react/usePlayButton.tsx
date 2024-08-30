@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAmbient } from "./AmbientContext";
 import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
+
+const hapticsImpactMedium = async () => {
+  await Haptics.impact({ style: ImpactStyle.Medium });
+};
 
 export const usePlayButton = () => {
   const ambient = useAmbient();
@@ -32,6 +37,7 @@ export const usePlayButton = () => {
 
   function togglePlay() {
     if (!ambient.currentSequence) return;
+    hapticsImpactMedium();
     if (isPlaying) {
       FirebaseAnalytics.logEvent({
         name: "stop_sequence",

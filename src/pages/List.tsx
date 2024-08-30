@@ -7,7 +7,7 @@ import {
   IonTitle,
   IonToolbar,
   useIonRouter,
-  useIonAlert,
+  useIonModal,
 } from "@ionic/react";
 import React from "react";
 import Card from "../components/Card";
@@ -17,6 +17,8 @@ import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import { StepSequencerPreset } from "../AMBIENT/stepSequencer/StepSequencerPreset";
 import { useAmbient } from "../AMBIENT/react";
 import useRevenueCat from "../Hooks/useRevenueCat";
+import UpgradeModal from "../components/UpgradeModal";
+import Player from "../components/Player";
 
 const logEvent = async (preset: StepSequencerPreset) => {
   await FirebaseAnalytics.logEvent({
@@ -28,31 +30,31 @@ const logEvent = async (preset: StepSequencerPreset) => {
 const List: React.FC = () => {
   const ambient = useAmbient();
   const router = useIonRouter();
-  const [presentAlert] = useIonAlert();
+  const [present, dismiss] = useIonModal(UpgradeModal, {
+    dismiss: (data: string, role: string) => dismiss(data, role),
+  });
   const { offerings, customerInfo, error, purchasePackage, isPremiumUser } =
     useRevenueCat();
 
   const handleSelect = (preset: StepSequencerPreset) => {
     logEvent(preset);
     console.log(preset.isPremiumContent);
-    if (!preset.isPremiumContent || isPremiumUser) {
+    if (!preset.isPremiumContent) {
       ambient.currentSequence
         ? ambient.changeSequence(preset)
         : ambient.addSequence(preset);
       // ambient.ui.playCurrentSequence();
       router.push("/listen");
     } else {
-      presentAlert({
-        header: "Premium Content",
-        message: "Upgrade now to access this content.",
-        buttons: ["Yes Please"],
-      });
+      present();
     }
   };
 
   return (
     <IonPage>
-      <IonHeader translucent={true} mode="ios"></IonHeader>
+      <IonHeader translucent={true} mode="ios">
+        <IonToolbar></IonToolbar>
+      </IonHeader>
       <IonContent className="ion-padding" id="dark-bg" fullscreen>
         <div id="card-wrapper">
           <div id="card-container">
@@ -63,7 +65,12 @@ const List: React.FC = () => {
                 onSelect={() => handleSelect(preset)}
               />
             ))}
+            <Card
+              preset={presets.default}
+              onSelect={() => handleSelect(presets.default)}
+            />
           </div>
+          {!!ambient.currentSequence?.isPlaying && <Player />}
         </div>
       </IonContent>
     </IonPage>

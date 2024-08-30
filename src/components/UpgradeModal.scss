@@ -1,0 +1,39 @@
+#modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  text-align: center;
+
+  #sales-copy {
+    color: var(--ion-color-medium);
+    margin-block: 2rem;
+  }
+
+  #price-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.875rem;
+    width: 100%;
+    margin-bottom: 6rem;
+    #price {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+  #sub-buttons {
+    margin-top: 4rem;
+    width: 100%;
+  }
+  #monthly-button,
+  #yearly-button {
+    --color: var(--ion-color-light);
+    --padding-top: 1.5rem;
+    --padding-bottom: 1.5rem;
+    width: 80%;
+    margin-block: 0.5rem;
+  }
+}

@@ -40,19 +40,23 @@ import {
   AuthenticatedRoute,
   useAuth,
 } from "./context/AuthContext";
-import { AmbientProvider } from "./AMBIENT/react";
+import { AmbientProvider, useAmbient } from "./AMBIENT/react";
 import Listen from "./pages/Listen";
 import List from "./pages/List";
 
 import useRevenueCat from "./Hooks/useRevenueCat";
 import { home, person, volumeHigh } from "ionicons/icons";
 import { GiSoundWaves } from "react-icons/gi";
+import { useEffect } from "react";
+import { App as CapApp } from "@capacitor/app";
+import { BackgroundTask } from "@capawesome/capacitor-background-task";
 
 setupIonicReact();
 
 const AuthLayout: React.FC = () => {
   const { initialized, user } = useAuth();
   const { offerings, customerInfo, isPremiumUser } = useRevenueCat();
+  const ambient = useAmbient();
 
   return (
     <IonApp>

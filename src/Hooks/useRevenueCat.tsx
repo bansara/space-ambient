@@ -13,6 +13,8 @@ const useRevenueCat = () => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
   const [error, setError] = useState<unknown | null>(null);
   const [isPremiumUser, setIsPremiumUser] = useState(false);
+  const [monthly, setMonthly] = useState<PurchasesPackage | undefined>();
+  const [yearly, setYearly] = useState<PurchasesPackage | undefined>();
 
   useEffect(() => {
     const fetchRevenueCatData = async () => {
@@ -27,6 +29,18 @@ const useRevenueCat = () => {
             offerings.current !== null &&
             offerings.current.availablePackages.length !== 0
           ) {
+            offerings.current.availablePackages.forEach((pkg, i) => {
+              console.log(`PACKAGE ${i}`, pkg);
+            });
+            const monthlySubscription =
+              offerings.current.availablePackages.find(
+                (pkg) => pkg.identifier === "$rc_monthly"
+              );
+            setMonthly(monthlySubscription);
+            const yearlySubscription = offerings.current.availablePackages.find(
+              (pkg) => pkg.identifier === "$rc_annual"
+            );
+            setYearly(yearlySubscription);
             setOfferings(offerings.current.availablePackages);
           }
           const customerInfo = await Purchases.getCustomerInfo();
@@ -74,6 +88,8 @@ const useRevenueCat = () => {
     error,
     purchasePackage,
     isPremiumUser,
+    monthly,
+    yearly,
   };
 };
 

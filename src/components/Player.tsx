@@ -1,14 +1,14 @@
 import { IonButton, IonIcon, IonRange } from "@ionic/react";
 import { playCircle, pauseCircle, volumeLow, volumeHigh } from "ionicons/icons";
-import { usePlayButton } from "../AMBIENT/react";
+import { useAmbient, usePlayButton } from "../AMBIENT/react";
 import "./Player.scss";
 import { useRangeVolume } from "../AMBIENT/react/useRangeVolume";
 
 const Player = () => {
   const { isPlaying, togglePlay } = usePlayButton();
-  const { volume, setRangeVolume } = useRangeVolume();
+  const ambient = useAmbient();
   return (
-    <div className="glassmorphic" id="player-container">
+    <div id="player-container">
       <IonButton fill="clear" onClick={togglePlay} aria-label="Toggle Play">
         {isPlaying ? (
           <IonIcon ios={pauseCircle} md={pauseCircle} slot="icon-only" />
@@ -16,7 +16,8 @@ const Player = () => {
           <IonIcon ios={playCircle} md={playCircle} slot="icon-only" />
         )}
       </IonButton>
-      <IonRange
+      <p>{ambient.currentSequence?.currentPreset?.displayName}</p>
+      {/* <IonRange
         min={0}
         max={1}
         step={0.01}
@@ -37,7 +38,7 @@ const Player = () => {
           icon={volumeHigh}
           className="vol-icon"
         />
-      </IonRange>
+      </IonRange> */}
     </div>
   );
 };
